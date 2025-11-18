@@ -1,4 +1,4 @@
-import { convertTextToSVG } from '../src/convertTextToSVG';
+import { convertTextToSVG } from './convertTextToSVG';
 
 describe('convertTextToSVG', () => {
   test('renders basic ASCII text', () => {
