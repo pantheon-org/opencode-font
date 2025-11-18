@@ -7,7 +7,6 @@ coverage/
 *.tsbuildinfo
 .vscode
 
-# workflow files
-!.github/workflows/*.yml
-!.github/workflows/*.yaml
-!.github/scripts/*.sh
+# Allow GitHub workflows and scripts
+!.github/
+!.github/**
