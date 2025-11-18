@@ -3,6 +3,9 @@ dist/
 coverage/
 *.tgz
 
+# OpenCode context (project-specific, not for repo)
+.context/
+
 # TypeScript outputs/ide files
 *.tsbuildinfo
 .vscode
