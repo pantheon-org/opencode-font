@@ -16,6 +16,7 @@ Port the GitHub Pages deployment pipeline from the `opencode-warcraft-notificati
 - The existing `demo/` directory content should be integrated or replaced with the Astro site
 
 **Assumptions:**
+
 - The deployment should follow the same architectural patterns as `opencode-warcraft-notifications`
 - The site should include both API documentation and interactive demos
 - Fonts generated during CI should be available to the deployed site
@@ -43,6 +44,7 @@ Port the GitHub Pages deployment pipeline from the `opencode-warcraft-notificati
 ## Deliverables
 
 1. **Astro Site Structure** (`pages/` directory):
+
    ```
    pages/
    ├── src/
@@ -143,6 +145,7 @@ If any of the following are unclear, seek clarification:
 ## Example Output
 
 **File**: `.github/workflows/deploy-docs.yml` (partial)
+
 ```yaml
 name: Deploy Documentation
 
@@ -152,7 +155,7 @@ on:
     paths:
       - 'demo/**'
       - 'pages/**'
-      - 'src/alphabet/**'  # Redeploy when glyphs change
+      - 'src/alphabet/**' # Redeploy when glyphs change
       - 'README.md'
   release:
     types: [published]
@@ -164,7 +167,7 @@ jobs:
     steps:
       - name: Generate font files
         run: bun run generate:fonts
-      
+
       - name: Build Astro site
         run: |
           cd pages
@@ -173,6 +176,7 @@ jobs:
 ```
 
 **File**: `pages/src/pages/index.astro` (partial)
+
 ```astro
 ---
 import { blockyTextToSVG, convertTextToSVG } from '@pantheon-org/opencode-font';
