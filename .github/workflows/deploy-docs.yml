@@ -1,0 +1,110 @@
+name: Deploy Documentation
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'pages/**'
+      - 'src/alphabet/**'
+      - 'fonts/**'
+      - 'README.md'
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build Documentation
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 0
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@735343b667d3e6f658f44d0eca948eb6282f2b76 # v2.0.2
+        with:
+          bun-version: 'latest'
+
+      - name: Cache dependencies
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: ~/.bun/install/cache
+          key: ${{ runner.os }}-bun-pages-${{ hashFiles('**/pages/bun.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-bun-pages-
+
+      - name: Generate fonts
+        run: |
+          bun install --frozen-lockfile
+          bun run generate:fonts
+          echo "✅ Fonts generated successfully"
+
+      - name: Install documentation dependencies
+        run: |
+          cd pages
+          bun install --frozen-lockfile
+          echo "✅ Dependencies installed"
+
+      - name: Copy fonts to public directory
+        run: |
+          cd pages
+          bun run copy-fonts
+          echo "✅ Fonts copied to public/fonts/"
+
+      - name: Transform documentation
+        run: |
+          cd pages
+          node transform-docs.js
+          echo "✅ Documentation transformed"
+
+      - name: Build documentation
+        run: |
+          cd pages
+          bun run build
+          echo "✅ Documentation built successfully"
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3.0.1
+        with:
+          path: ./pages/dist
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4 # v4.0.5
+
+      - name: Summary
+        run: |
+          echo "## 🎉 Documentation Deployment Complete!" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Deployment Details" >> $GITHUB_STEP_SUMMARY
+          echo "- **URL**: ${{ steps.deployment.outputs.page_url }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Commit**: \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Trigger**: ${{ github.event_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Build Process" >> $GITHUB_STEP_SUMMARY
+          echo "1. 🔧 Generate fonts from \`src/alphabet/\`" >> $GITHUB_STEP_SUMMARY
+          echo "2. 📄 Transform README to \`./pages/src/content/docs/\`" >> $GITHUB_STEP_SUMMARY
+          echo "3. 📦 Copy fonts to \`./pages/public/fonts/\`" >> $GITHUB_STEP_SUMMARY
+          echo "4. 🏗️  Build Astro site to \`./pages/dist/\`" >> $GITHUB_STEP_SUMMARY
+          echo "5. 🚀 Deploy to GitHub Pages via Actions" >> $GITHUB_STEP_SUMMARY

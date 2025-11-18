@@ -1,0 +1,351 @@
+---
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+const title = 'Glyph Showcase';
+const description = 'All available glyphs rendered as SVG in both light and dark themes';
+---
+
+<StarlightPage frontmatter={{ title, description }}>
+
+<div class="glyph-showcase">
+
+<h2>Letters (A-Z)</h2>
+
+<p>Browse all 26 letter glyphs in the OpenCode Font.</p>
+
+<div class="glyph-grid" id="letters-grid">
+</div>
+
+<hr />
+
+<h2>Symbols</h2>
+
+<p>The font includes 6 special symbol glyphs.</p>
+
+<div class="symbol-list">
+  <div class="symbol-card">
+    <div class="symbol-name">Hyphen</div>
+    <div class="symbol-char">-</div>
+    <div class="symbol-preview" id="symbol-hyphen"></div>
+  </div>
+
+<div class="symbol-card">
+  <div class="symbol-name">Pipe</div>
+  <div class="symbol-char">|</div>
+  <div class="symbol-preview" id="symbol-pipe"></div>
+</div>
+
+<div class="symbol-card">
+  <div class="symbol-name">Apostrophe</div>
+  <div class="symbol-char">'</div>
+  <div class="symbol-preview" id="symbol-apostrophe"></div>
+</div>
+
+<div class="symbol-card">
+  <div class="symbol-name">Quote</div>
+  <div class="symbol-char">"</div>
+  <div class="symbol-preview" id="symbol-quote"></div>
+</div>
+
+<div class="symbol-card">
+  <div class="symbol-name">Question</div>
+  <div class="symbol-char">?</div>
+  <div class="symbol-preview" id="symbol-question"></div>
+</div>
+
+  <div class="symbol-card">
+    <div class="symbol-name">Exclamation</div>
+    <div class="symbol-char">!</div>
+    <div class="symbol-preview" id="symbol-exclamation"></div>
+  </div>
+</div>
+
+<hr />
+
+<h2>Theme Comparison</h2>
+
+<p>See how glyphs look in both light and dark themes.</p>
+
+<div class="theme-controls">
+  <button id="show-light" class="theme-btn">
+    Light Theme
+  </button>
+  <button id="show-dark" class="theme-btn active">
+    Dark Theme
+  </button>
+  <button id="show-both" class="theme-btn">
+    Both
+  </button>
+</div>
+
+</div>
+
+<style>
+  .glyph-showcase {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .glyph-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+  }
+
+  .glyph-card {
+    background: var(--color-background-weak);
+    border: 1px solid var(--color-border-weak);
+    border-radius: 8px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+
+  .glyph-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--color-border);
+  }
+
+  .glyph-letter {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--color-text-strong);
+    font-family: var(--__sl-font);
+  }
+
+  .glyph-preview {
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .glyph-preview svg {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .symbol-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+  }
+
+  .symbol-card {
+    background: var(--color-background-weak);
+    border: 1px solid var(--color-border-weak);
+    border-radius: 8px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .symbol-name {
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--color-text-strong);
+    letter-spacing: 0.5px;
+  }
+
+  .symbol-char {
+    font-size: 2rem;
+    font-family: var(--__sl-font);
+    color: var(--color-text);
+  }
+
+  .symbol-preview {
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .symbol-preview svg {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .theme-controls {
+    display: flex;
+    gap: 1rem;
+    margin: 2rem 0;
+    flex-wrap: wrap;
+  }
+
+  .theme-btn {
+    padding: 0.75rem 1.5rem;
+    background: var(--color-background-weak);
+    border: 1px solid var(--color-border-weak);
+    border-radius: 4px;
+    font-family: var(--__sl-font);
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    color: var(--color-text);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .theme-btn:hover {
+    background: var(--color-background-weak-hover);
+  }
+
+  .theme-btn.active {
+    background: var(--color-background-strong);
+    color: var(--color-text-inverted);
+    border-color: var(--color-background-strong);
+  }
+
+  .theme-preview {
+    display: none;
+  }
+
+  .theme-preview.show-light .light-theme,
+  .theme-preview.show-dark .dark-theme,
+  .theme-preview.show-both .light-theme,
+  .theme-preview.show-both .dark-theme {
+    display: block;
+  }
+
+  .glyph-preview.dual {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .glyph-preview.dual .light-theme,
+  .glyph-preview.dual .dark-theme {
+    flex: 1;
+  }
+</style>
+
+<script>
+  import { blockyTextToSVG } from '../utils/alphabet';
+
+  const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+  const symbols = [
+    { id: 'hyphen', char: '-' },
+    { id: 'pipe', char: '|' },
+    { id: 'apostrophe', char: "'" },
+    { id: 'quote', char: '"' },
+    { id: 'question', char: '?' },
+    { id: 'exclamation', char: '!' },
+  ];
+
+  let currentTheme: 'light' | 'dark' | 'both' = 'dark';
+
+  function renderGlyph(char: string, theme: 'light' | 'dark') {
+    return blockyTextToSVG(char, {
+      theme,
+      blockSize: 6,
+      charSpacing: 0,
+      optimize: true,
+    });
+  }
+
+  function renderLetters() {
+    const grid = document.getElementById('letters-grid')!;
+    grid.innerHTML = '';
+
+    letters.forEach(letter => {
+      const card = document.createElement('div');
+      card.className = 'glyph-card';
+
+      const letterDiv = document.createElement('div');
+      letterDiv.className = 'glyph-letter';
+      letterDiv.textContent = letter;
+
+      const preview = document.createElement('div');
+      preview.className = 'glyph-preview';
+      
+      if (currentTheme === 'both') {
+        preview.classList.add('dual');
+        const lightDiv = document.createElement('div');
+        lightDiv.className = 'light-theme';
+        lightDiv.innerHTML = renderGlyph(letter, 'light');
+        
+        const darkDiv = document.createElement('div');
+        darkDiv.className = 'dark-theme';
+        darkDiv.innerHTML = renderGlyph(letter, 'dark');
+        
+        preview.appendChild(lightDiv);
+        preview.appendChild(darkDiv);
+      } else {
+        preview.innerHTML = renderGlyph(letter, currentTheme);
+      }
+
+      card.appendChild(letterDiv);
+      card.appendChild(preview);
+      grid.appendChild(card);
+    });
+  }
+
+  function renderSymbols() {
+    symbols.forEach(({ id, char }) => {
+      const preview = document.getElementById(`symbol-${id}`)!;
+      
+      if (currentTheme === 'both') {
+        preview.classList.add('dual');
+        const lightDiv = document.createElement('div');
+        lightDiv.className = 'light-theme';
+        lightDiv.innerHTML = renderGlyph(char, 'light');
+        
+        const darkDiv = document.createElement('div');
+        darkDiv.className = 'dark-theme';
+        darkDiv.innerHTML = renderGlyph(char, 'dark');
+        
+        preview.innerHTML = '';
+        preview.appendChild(lightDiv);
+        preview.appendChild(darkDiv);
+      } else {
+        preview.innerHTML = renderGlyph(char, currentTheme);
+      }
+    });
+  }
+
+  function updateDisplay() {
+    renderLetters();
+    renderSymbols();
+  }
+
+  // Theme controls
+  const showLight = document.getElementById('show-light')!;
+  const showDark = document.getElementById('show-dark')!;
+  const showBoth = document.getElementById('show-both')!;
+
+  function setActiveButton(button: HTMLElement) {
+    [showLight, showDark, showBoth].forEach(btn => btn.classList.remove('active'));
+    button.classList.add('active');
+  }
+
+  showLight.addEventListener('click', () => {
+    currentTheme = 'light';
+    setActiveButton(showLight);
+    updateDisplay();
+  });
+
+  showDark.addEventListener('click', () => {
+    currentTheme = 'dark';
+    setActiveButton(showDark);
+    updateDisplay();
+  });
+
+  showBoth.addEventListener('click', () => {
+    currentTheme = 'both';
+    setActiveButton(showBoth);
+    updateDisplay();
+  });
+
+  // Initialize
+  updateDisplay();
+</script>
+
+</StarlightPage>
