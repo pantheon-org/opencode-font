@@ -1,0 +1,20 @@
+{
+  "name": "@pantheon-org/opencode-font",
+  "version": "0.0.0-dev",
+  "description": "OpenCode-style font package with text-to-SVG conversion",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": ["dist/", "fonts/"],
+  "scripts": {
+    "build": "echo \"No build step (pure ESM).\"",
+    "test": "jest",
+    "pack": "npm pack"
+  },
+  "keywords": ["font", "svg", "text-to-svg", "opencode"],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^29.0.0"
+  }
+}
