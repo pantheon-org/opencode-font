@@ -41,6 +41,16 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
+      # Generate and validate font files as part of PR validation
+      # Ensures font generation works and produces valid output
+      - name: Generate font files
+        run: |
+          echo "🔤 Generating OpenCodeLogo fonts..."
+          bun run generate:fonts
+
+          echo "🔍 Validating generated fonts..."
+          bash scripts/validate-fonts.sh
+
       - name: Check formatting
         run: bun run format:check
 
