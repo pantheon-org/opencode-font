@@ -15,7 +15,9 @@ coverage/
 pages/node_modules/
 pages/.astro/
 pages/dist/
-pages/src/content/docs/
+
+# Generated documentation (transformed from README.md)
+pages/src/content/docs/index.md
 
 # Generated documentation artifacts (deployed to docs branch)
 dist/
