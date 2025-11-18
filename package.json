@@ -1,6 +1,6 @@
 {
   "name": "@pantheon-org/opencode-font",
-  "version": "0.0.0-dev",
+  "version": "0.0.0",
   "description": "OpenCode-style font package with text-to-SVG conversion",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -15,6 +15,7 @@
     "start": "bun run src/index.ts",
     "build": "tsc -p tsconfig.json",
     "test": "bun test",
+    "test:coverage": "bun test --coverage",
     "typecheck": "tsc --noEmit",
     "lint": "eslint 'src/**/*.{ts,tsx,js,jsx}'",
     "lint:fix": "eslint 'src/**/*.{ts,tsx,js,jsx}' --fix",

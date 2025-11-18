@@ -6,3 +6,8 @@ coverage/
 # TypeScript outputs/ide files
 *.tsbuildinfo
 .vscode
+
+# workflow files
+!.github/workflows/*.yml
+!.github/workflows/*.yaml
+!.github/scripts/*.sh
