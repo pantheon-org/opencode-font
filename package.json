@@ -1,6 +1,6 @@
 {
-  "name": "@pantheon-org/opencode-font",
-  "version": "0.0.0",
+  "name": "@pantheon-ai/opencode-font",
+  "version": "0.0.1",
   "description": "OpenCode-style font package with text-to-SVG conversion",
   "main": "dist/index.js",
   "module": "dist/index.js",
