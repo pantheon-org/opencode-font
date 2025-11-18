@@ -94,24 +94,29 @@ Investigate and document the technical approach for generating the most widely-u
 ## Example Output
 
 **Investigation Report Excerpt** (Section 2):
-```markdown
+
+````markdown
 ### Recommended Toolchain: fonttools + Bun Script
 
 **Tool**: `fonttools` (Python library) + `bun` for scripting
 **Reason**: Cross-platform, actively maintained, MIT license, supports TTF→WOFF/WOFF2 conversion, no GUI dependencies.
 
 **Installation**:
+
 - CI (Ubuntu): `sudo apt-get install python3-pip && pip3 install fonttools brotli`
 - Local (macOS): `brew install python3 && pip3 install fonttools brotli`
 
 **Conversion command**:
+
 ```bash
 # Convert TTF to WOFF2
 pyftsubset input.ttf --output-file=output.woff2 --flavor=woff2
 # Convert TTF to WOFF
 pyftsubset input.ttf --output-file=output.woff --flavor=woff
 ```
-```
+````
+
+````
 
 **Local Script Outline** (`scripts/generate-fonts.sh`):
 ```bash
@@ -130,9 +135,10 @@ pyftsubset "$SOURCE_FILE" --output-file="$OUTPUT_DIR/OpenCodeLogo.woff" --flavor
 cp "$SOURCE_FILE" "$OUTPUT_DIR/OpenCodeLogo.ttf"
 
 echo "✅ Fonts generated in $OUTPUT_DIR/"
-```
+````
 
 **CI Integration Snippet** (add to `.github/workflows/5-publish.yml` after "Install dependencies" step):
+
 ```yaml
 - name: Generate font files
   run: |
