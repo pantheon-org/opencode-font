@@ -11,6 +11,12 @@ coverage/
 !.github/scripts/
 !.github/scripts/**
 
+# Astro documentation build (pages directory)
+pages/node_modules/
+pages/.astro/
+pages/dist/
+pages/src/content/docs/
+
 # OpenCode context (project-specific, not for repo)
 .context/
 
