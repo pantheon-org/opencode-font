@@ -47,6 +47,20 @@ Run tests with:
 npm test
 ```
 
+## Using the packaged CSS helper
+
+This repo includes a small helper CSS at `css/opencode-font.css` that registers the `OpenCode` font-family and points at font files in the `fonts/` directory. If you publish the package, adjust the paths or include the CSS from your build output.
+
+Example (install and include):
+
+```html
+<link rel="stylesheet" href="node_modules/@pantheon-org/opencode-font/css/opencode-font.css">
+```
+
+Demo
+
+Open `demo/index.html` in a browser to see a small interactive demo that generates SVG from text and uses the packaged font via the helper CSS (replace the placeholder font files in `fonts/` with real files for accurate rendering).
+
 ## License
 
 MIT

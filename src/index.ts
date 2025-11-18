@@ -1,0 +1,1 @@
+export { convertTextToSVG } from './convertTextToSVG';

@@ -2,3 +2,7 @@ node_modules/
 dist/
 coverage/
 *.tgz
+
+# TypeScript outputs/ide files
+*.tsbuildinfo
+.vscode

@@ -6,15 +6,20 @@
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": ["dist/", "fonts/"],
+  "type": "module",
   "scripts": {
-    "build": "echo \"No build step (pure ESM).\"",
-    "test": "jest",
+    "dev": "bun dev",
+    "start": "bun run src/index.ts",
+    "build": "tsc -p tsconfig.json",
+    "test": "bun test",
+    "typecheck": "tsc --noEmit",
     "pack": "npm pack"
   },
   "keywords": ["font", "svg", "text-to-svg", "opencode"],
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "jest": "^29.0.0"
+    "jest": "^29.0.0",
+    "@types/jest": "^29.0.0"
   }
 }

@@ -3,18 +3,18 @@
  * This implementation emits a simple SVG containing a single <text> node.
  * It does not rasterize glyphs — consumers must embed the font via CSS or
  * reference the packaged font in their app.
- *
- * @param {string} text - The text to render into SVG
- * @param {Object} [options]
- * @param {number} [options.fontSize=48]
- * @param {string} [options.color="#000"]
- * @param {string} [options.fontFamily="OpenCodeLogo"]
- * @param {number} [options.width] - svg width (optional)
- * @param {number} [options.height] - svg height (optional)
- * @param {boolean} [options.includeNamespace=true] - include SVG namespace
- * @returns {string} svg string
  */
-function convertTextToSVG(text, options = {}) {
+
+export function convertTextToSVG(text: string | null | undefined, options: {
+  fontSize?: number;
+  color?: string;
+  fontFamily?: string;
+  width?: number;
+  height?: number;
+  includeNamespace?: boolean;
+  role?: string;
+  ariaLabel?: string;
+} = {}): string {
   const {
     fontSize = 48,
     color = "#000",
@@ -27,7 +27,6 @@ function convertTextToSVG(text, options = {}) {
   } = options;
 
   const safeText = text == null ? "" : String(text);
-
   const ns = includeNamespace ? 'xmlns="http://www.w3.org/2000/svg"' : "";
   const wAttr = width ? ` width="${width}"` : "";
   const hAttr = height ? ` height="${height}"` : "";
@@ -40,8 +39,8 @@ function convertTextToSVG(text, options = {}) {
   return svg;
 }
 
-function escapeXml(unsafe) {
-  return unsafe == null ? "" : String(unsafe).replace(/[&<>"']/g, function (c) {
+export function escapeXml(unsafe: string | null | undefined): string {
+  return unsafe == null ? "" : String(unsafe).replace(/[&<>\"']/g, function (c) {
     switch (c) {
       case "&":
         return "&amp;";
@@ -53,9 +52,8 @@ function escapeXml(unsafe) {
         return "&quot;";
       case "'":
         return "&apos;";
+      default:
+        return c;
     }
   });
 }
-
-module.exports = { convertTextToSVG };
-

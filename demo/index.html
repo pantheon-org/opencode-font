@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>OpenCode Font — Demo</title>
+  <link rel="stylesheet" href="../css/opencode-font.css">
+  <style>
+    body { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; padding: 2rem; }
+    .preview { border: 1px dashed #ddd; padding: 1rem; display: inline-block; }
+    .controls { margin-bottom: 1rem; }
+    textarea { width: 100%; height: 4rem; }
+  </style>
+</head>
+<body>
+  <h1>OpenCode Font — SVG text demo</h1>
+
+  <p>Type text below and click <strong>Generate SVG</strong>. This demo uses the bundled CSS to register the font-family — replace the font files in <code>fonts/</code> with real files.</p>
+
+  <div class="controls">
+    <label>Text</label>
+    <textarea id="text">Hello OpenCode</textarea>
+    <label>Font size</label>
+    <input id="size" type="number" value="48">
+    <button id="gen">Generate SVG</button>
+  </div>
+
+  <div class="preview opencode-font" id="out" aria-live="polite"></div>
+
+  <script>
+    // Simple client-side converter that mirrors the library API for demonstration.
+    function escapeXml(s) {
+      return s.replace(/[<>&"']/g, function (c) {
+        return { '<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":"&#39;" }[c];
+      });
+    }
+
+    function convertTextToSVG(text, opts) {
+      opts = opts || {};
+      var fontSize = opts.fontSize || 48;
+      var color = opts.color || '#000';
+      var fontFamily = opts.fontFamily || 'OpenCode, monospace';
+      var width = opts.width || (text.length * (fontSize * 0.6));
+      var height = opts.height || (fontSize * 1.2);
+      var escaped = escapeXml(text);
+      var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="' + width + '" height="' + height + '" role="img" aria-label="' + escaped + '">';
+      svg += '<text x="0" y="' + (fontSize * 0.8) + '" font-family="' + fontFamily + '" font-size="' + fontSize + '" fill="' + color + '">' + escaped + '</text>';
+      svg += '</svg>';
+      return svg;
+    }
+
+    document.getElementById('gen').addEventListener('click', function () {
+      var text = document.getElementById('text').value;
+      var size = parseInt(document.getElementById('size').value, 10) || 48;
+      var svg = convertTextToSVG(text, { fontSize: size });
+      var out = document.getElementById('out');
+      out.innerHTML = svg;
+    });
+
+    document.getElementById('gen').click();
+  </script>
+</body>
+</html>
