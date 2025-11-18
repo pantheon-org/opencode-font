@@ -182,8 +182,8 @@ jobs:
 
           echo "🎯 Enabling auto-merge for PR #${PR_NUMBER}"
 
-          # Enable auto-merge with squash
-          gh pr merge $PR_NUMBER --squash --auto --delete-branch
+          # Enable auto-merge with merge commit (preserves version bump commit message for tag creation)
+          gh pr merge $PR_NUMBER --merge --auto --delete-branch
 
           echo "✅ Auto-merge enabled!"
 

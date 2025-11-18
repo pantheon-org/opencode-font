@@ -33,14 +33,20 @@ jobs:
       - name: Check if version bump commit
         id: check
         run: |
-          LATEST_COMMIT_MSG=$(git log -1 --pretty=format:"%s")
+          # Check last 3 commits for version bump (handles merge commits)
+          RECENT_COMMITS=$(git log -3 --pretty=format:"%s")
 
-          # Only create tag for version bump commits (allows PR number suffix)
-          if [[ "$LATEST_COMMIT_MSG" =~ ^chore:\ bump\ version\ to\ [0-9]+\.[0-9]+\.[0-9]+ ]]; then
-            echo "✅ Version bump commit detected: $LATEST_COMMIT_MSG"
+          echo "📋 Recent commits:"
+          echo "$RECENT_COMMITS"
+          echo ""
+
+          # Look for version bump commit in recent history
+          if echo "$RECENT_COMMITS" | grep -q "^chore: bump version to [0-9]\+\.[0-9]\+\.[0-9]\+"; then
+            VERSION_COMMIT=$(echo "$RECENT_COMMITS" | grep "^chore: bump version to [0-9]\+\.[0-9]\+\.[0-9]\+" | head -1)
+            echo "✅ Version bump commit detected: $VERSION_COMMIT"
             echo "is_version_bump=true" >> $GITHUB_OUTPUT
           else
-            echo "ℹ️ Not a version bump commit: $LATEST_COMMIT_MSG"
+            echo "ℹ️ No version bump commit found in recent history"
             echo "is_version_bump=false" >> $GITHUB_OUTPUT
           fi
 
