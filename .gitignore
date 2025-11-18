@@ -7,6 +7,16 @@ coverage/
 *.tsbuildinfo
 .vscode
 
+# Generated font files (created by scripts/generate-fonts.ts)
+fonts/*.woff2
+fonts/*.woff
+fonts/*.ttf
+fonts/*.otf
+
+# Keep directory structure and test files
+!fonts/.gitkeep
+!fonts/test.html
+
 # Allow GitHub workflows and scripts
 !.github/
 !.github/**

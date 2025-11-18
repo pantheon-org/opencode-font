@@ -327,6 +327,106 @@ Complete flow from PR to npm release:
 
 ---
 
+## Font Generation in CI/CD
+
+### Overview
+
+The OpenCodeLogo font files (WOFF2, WOFF, TTF) are automatically generated during CI/CD workflows. Generated fonts are included in the published npm package but are NOT committed to git.
+
+### Integration Points
+
+#### Validation Workflow (`1-validate.yml`)
+
+Font generation added after dependency installation:
+
+```yaml
+- name: Generate font files
+  run: |
+    bun run generate:fonts
+    bash scripts/validate-fonts.sh
+```
+
+**Purpose:** Validates that font generation works correctly in PRs.
+
+#### Publish Workflow (`5-publish.yml`)
+
+Font generation added to both npm publish and demo deploy jobs:
+
+```yaml
+- name: Generate font files
+  run: |
+    bun run generate:fonts
+    ls -lh fonts/*.woff2 fonts/*.woff fonts/*.ttf
+    bash scripts/validate-fonts.sh
+```
+
+**Purpose:** Generates fonts for npm package distribution and GitHub Pages demo.
+
+### Font Generation Details
+
+**Command:**
+
+```bash
+bun run generate:fonts
+```
+
+**Process:**
+
+1. Converts 32 grid-based glyphs (A-Z + 6 symbols) to SVG files
+2. Combines SVGs into SVG font format
+3. Converts SVG font → TTF → WOFF2/WOFF
+4. Validates output files
+
+**Output:**
+
+- `fonts/OpenCodeLogo.woff2` (~1.3 KB)
+- `fonts/OpenCodeLogo.woff` (~1.8 KB)
+- `fonts/OpenCodeLogo.ttf` (~6.4 KB)
+- **Total:** ~9.5 KB
+
+**Performance:** ~0.15 seconds (800× faster than 2-minute target)
+
+### Validation
+
+**Command:**
+
+```bash
+bun run validate:fonts
+```
+
+**Checks:**
+
+- File existence (WOFF2, WOFF, TTF)
+- Size limits (< 50KB, 100KB, 200KB respectively)
+- Format correctness (magic bytes verification)
+- Non-empty files
+
+**Failure:** Build stops immediately if validation fails.
+
+### Local Development
+
+Developers must generate fonts locally:
+
+```bash
+bun run generate:fonts  # Generate fonts
+bun run validate:fonts  # Optional validation
+open fonts/test.html    # Visual test
+```
+
+**Note:** Font files excluded from git via `.gitignore`.
+
+### Package Distribution
+
+The `package.json` includes fonts in the published package:
+
+```json
+"files": ["dist/", "fonts/"]
+```
+
+Consumers receive compiled code (`dist/`) and font files (`fonts/`).
+
+---
+
 ## Links
 
 - [GitHub Actions Documentation](https://docs.github.com/en/actions)
