@@ -3,9 +3,19 @@
 /**
  * Font Generation Script for OpenCodeLogo
  *
- * Converts grid-based glyph system to web fonts (WOFF2, WOFF, TTF)
- * Based on the blocky text system from opencode-warcraft-notifications
+ * Converts alphabet module glyphs to web fonts (WOFF2, WOFF, TTF)
+ * Uses src/alphabet as the SINGLE SOURCE OF TRUTH for glyph definitions
  * Output: fonts/*.{woff2,woff,ttf}
+ *
+ * IMPORTANT: This script imports glyphs from src/alphabet/index.ts
+ * Do NOT maintain duplicate glyph definitions here. The alphabet module
+ * is the authoritative source for all character glyphs (A-Z and symbols).
+ *
+ * Flow:
+ *   1. Import ALPHABET and SYMBOLS from src/alphabet
+ *   2. Generate SVG files for each glyph (supports variable width 1-5 columns)
+ *   3. Convert to SVG font → TTF → WOFF2/WOFF
+ *   4. Output fonts to fonts/ directory
  *
  * Usage:
  *   bun run scripts/generate-fonts.ts
@@ -19,6 +29,9 @@ import { SVGIcons2SVGFontStream } from 'svgicons2svgfont';
 import svg2ttf from 'svg2ttf';
 import ttf2woff from 'ttf2woff';
 import ttf2woff2 from 'ttf2woff2';
+
+// Import alphabet module as single source of truth
+import { ALPHABET, SYMBOLS, type Glyph } from '../src/alphabet/index';
 
 // ============================================================================
 // Configuration
@@ -35,484 +48,85 @@ const CONFIG = {
 };
 
 // ============================================================================
-// Glyph Type Definitions
+// Glyph Mapping (using alphabet module as single source of truth)
+// Maps character names to their Unicode codepoints for font generation
 // ============================================================================
 
-type Glyph = {
-  rows: Record<number, number[]>;
+// Unicode mappings for letters (A=65, B=66, etc.)
+const LETTER_UNICODE_MAP: Record<string, number> = {
+  A: 65,
+  B: 66,
+  C: 67,
+  D: 68,
+  E: 69,
+  F: 70,
+  G: 71,
+  H: 72,
+  I: 73,
+  J: 74,
+  K: 75,
+  L: 76,
+  M: 77,
+  N: 78,
+  O: 79,
+  P: 80,
+  Q: 81,
+  R: 82,
+  S: 83,
+  T: 84,
+  U: 85,
+  V: 86,
+  W: 87,
+  X: 88,
+  Y: 89,
+  Z: 90,
 };
 
-// ============================================================================
-// Grid-based Glyph Definitions (7 rows × 4 columns)
-// Based on opencode-warcraft-notifications alphabet system
-// 0 = empty, 1 = filled
-// ============================================================================
-
-const GLYPHS: Record<string, { glyph: Glyph; unicode: number }> = {
-  A: {
-    unicode: 65,
-    glyph: {
-      rows: {
-        0: [0, 0, 0, 0],
-        1: [1, 1, 1, 1],
-        2: [0, 0, 0, 1],
-        3: [1, 1, 1, 1],
-        4: [1, 0, 0, 1],
-        5: [1, 1, 1, 1],
-        6: [0, 0, 0, 0],
-      },
-    },
-  },
-  B: {
-    unicode: 66,
-    glyph: {
-      rows: {
-        0: [0, 0, 0, 0],
-        1: [1, 1, 1, 1],
-        2: [1, 0, 0, 1],
-        3: [1, 1, 1, 1],
-        4: [1, 0, 0, 1],
-        5: [1, 1, 1, 1],
-        6: [0, 0, 0, 0],
-      },
-    },
-  },
-  C: {
-    unicode: 67,
-    glyph: {
-      rows: {
-        0: [0, 0, 0, 0],
-        1: [1, 1, 1, 1],
-        2: [1, 0, 0, 0],
-        3: [1, 0, 0, 0],
-        4: [1, 0, 0, 0],
-        5: [1, 1, 1, 1],
-        6: [0, 0, 0, 0],
-      },
-    },
-  },
-  D: {
-    unicode: 68,
-    glyph: {
-      rows: {
-        0: [0, 0, 0, 0],
-        1: [1, 1, 1, 1],
-        2: [1, 0, 0, 1],
-        3: [1, 0, 0, 1],
-        4: [1, 0, 0, 1],
-        5: [1, 1, 1, 1],
-        6: [0, 0, 0, 0],
-      },
-    },
-  },
-  E: {
-    unicode: 69,
-    glyph: {
-      rows: {
-        0: [0, 0, 0, 0],
-        1: [1, 1, 1, 1],
-        2: [1, 0, 0, 0],
-        3: [1, 1, 1, 0],
-        4: [1, 0, 0, 0],
-        5: [1, 1, 1, 1],
-        6: [0, 0, 0, 0],
-      },
-    },
-  },
-  F: {
-    unicode: 70,
-    glyph: {
-      rows: {
-        0: [0, 0, 0, 0],
-        1: [1, 1, 1, 1],
-        2: [1, 0, 0, 0],
-        3: [1, 1, 1, 0],
-        4: [1, 0, 0, 0],
-        5: [1, 0, 0, 0],
-        6: [0, 0, 0, 0],
-      },
-    },
-  },
-  G: {
-    unicode: 71,
-    glyph: {
-      rows: {
-        0: [0, 0, 0, 0],
-        1: [1, 1, 1, 1],
-        2: [1, 0, 0, 0],
-        3: [1, 0, 1, 1],
-        4: [1, 0, 0, 1],
-        5: [1, 1, 1, 1],
-        6: [0, 0, 0, 0],
-      },
-    },
-  },
-  H: {
-    unicode: 72,
-    glyph: {
-      rows: {
-        0: [0, 0, 0, 0],
-        1: [1, 0, 0, 1],
-        2: [1, 0, 0, 1],
-        3: [1, 1, 1, 1],
-        4: [1, 0, 0, 1],
-        5: [1, 0, 0, 1],
-        6: [0, 0, 0, 0],
-      },
-    },
-  },
-  I: {
-    unicode: 73,
-    glyph: {
-      rows: {
-        0: [0, 0, 0, 0],
-        1: [1, 1, 1, 1],
-        2: [0, 1, 1, 0],
-        3: [0, 1, 1, 0],
-        4: [0, 1, 1, 0],
-        5: [1, 1, 1, 1],
-        6: [0, 0, 0, 0],
-      },
-    },
-  },
-  J: {
-    unicode: 74,
-    glyph: {
-      rows: {
-        0: [0, 0, 0, 0],
-        1: [0, 1, 1, 1],
-        2: [0, 0, 1, 0],
-        3: [0, 0, 1, 0],
-        4: [1, 0, 1, 0],
-        5: [1, 1, 1, 0],
-        6: [0, 0, 0, 0],
-      },
-    },
-  },
-  K: {
-    unicode: 75,
-    glyph: {
-      rows: {
-        0: [0, 0, 0, 0],
-        1: [1, 0, 0, 1],
-        2: [1, 0, 1, 0],
-        3: [1, 1, 0, 0],
-        4: [1, 0, 1, 0],
-        5: [1, 0, 0, 1],
-        6: [0, 0, 0, 0],
-      },
-    },
-  },
-  L: {
-    unicode: 76,
-    glyph: {
-      rows: {
-        0: [0, 0, 0, 0],
-        1: [1, 0, 0, 0],
-        2: [1, 0, 0, 0],
-        3: [1, 0, 0, 0],
-        4: [1, 0, 0, 0],
-        5: [1, 1, 1, 1],
-        6: [0, 0, 0, 0],
-      },
-    },
-  },
-  M: {
-    unicode: 77,
-    glyph: {
-      rows: {
-        0: [0, 0, 0, 0],
-        1: [1, 0, 0, 1],
-        2: [1, 1, 1, 1],
-        3: [1, 0, 0, 1],
-        4: [1, 0, 0, 1],
-        5: [1, 0, 0, 1],
-        6: [0, 0, 0, 0],
-      },
-    },
-  },
-  N: {
-    unicode: 78,
-    glyph: {
-      rows: {
-        0: [0, 0, 0, 0],
-        1: [1, 0, 0, 1],
-        2: [1, 1, 0, 1],
-        3: [1, 0, 1, 1],
-        4: [1, 0, 0, 1],
-        5: [1, 0, 0, 1],
-        6: [0, 0, 0, 0],
-      },
-    },
-  },
-  O: {
-    unicode: 79,
-    glyph: {
-      rows: {
-        0: [0, 0, 0, 0],
-        1: [1, 1, 1, 1],
-        2: [1, 0, 0, 1],
-        3: [1, 0, 0, 1],
-        4: [1, 0, 0, 1],
-        5: [1, 1, 1, 1],
-        6: [0, 0, 0, 0],
-      },
-    },
-  },
-  P: {
-    unicode: 80,
-    glyph: {
-      rows: {
-        0: [0, 0, 0, 0],
-        1: [1, 1, 1, 1],
-        2: [1, 0, 0, 1],
-        3: [1, 1, 1, 1],
-        4: [1, 0, 0, 0],
-        5: [1, 0, 0, 0],
-        6: [0, 0, 0, 0],
-      },
-    },
-  },
-  Q: {
-    unicode: 81,
-    glyph: {
-      rows: {
-        0: [0, 0, 0, 0],
-        1: [1, 1, 1, 1],
-        2: [1, 0, 0, 1],
-        3: [1, 0, 0, 1],
-        4: [1, 0, 1, 0],
-        5: [1, 1, 0, 1],
-        6: [0, 0, 0, 0],
-      },
-    },
-  },
-  R: {
-    unicode: 82,
-    glyph: {
-      rows: {
-        0: [0, 0, 0, 0],
-        1: [1, 1, 1, 1],
-        2: [1, 0, 0, 1],
-        3: [1, 1, 1, 1],
-        4: [1, 0, 1, 0],
-        5: [1, 0, 0, 1],
-        6: [0, 0, 0, 0],
-      },
-    },
-  },
-  S: {
-    unicode: 83,
-    glyph: {
-      rows: {
-        0: [0, 0, 0, 0],
-        1: [1, 1, 1, 1],
-        2: [1, 0, 0, 0],
-        3: [1, 1, 1, 1],
-        4: [0, 0, 0, 1],
-        5: [1, 1, 1, 1],
-        6: [0, 0, 0, 0],
-      },
-    },
-  },
-  T: {
-    unicode: 84,
-    glyph: {
-      rows: {
-        0: [0, 0, 0, 0],
-        1: [1, 1, 1, 1],
-        2: [0, 1, 1, 0],
-        3: [0, 1, 1, 0],
-        4: [0, 1, 1, 0],
-        5: [0, 1, 1, 0],
-        6: [0, 0, 0, 0],
-      },
-    },
-  },
-  U: {
-    unicode: 85,
-    glyph: {
-      rows: {
-        0: [0, 0, 0, 0],
-        1: [1, 0, 0, 1],
-        2: [1, 0, 0, 1],
-        3: [1, 0, 0, 1],
-        4: [1, 0, 0, 1],
-        5: [1, 1, 1, 1],
-        6: [0, 0, 0, 0],
-      },
-    },
-  },
-  V: {
-    unicode: 86,
-    glyph: {
-      rows: {
-        0: [0, 0, 0, 0],
-        1: [1, 0, 0, 1],
-        2: [1, 0, 0, 1],
-        3: [1, 0, 0, 1],
-        4: [1, 0, 0, 1],
-        5: [0, 1, 1, 0],
-        6: [0, 0, 0, 0],
-      },
-    },
-  },
-  W: {
-    unicode: 87,
-    glyph: {
-      rows: {
-        0: [0, 0, 0, 0],
-        1: [1, 0, 0, 1],
-        2: [1, 0, 0, 1],
-        3: [1, 0, 0, 1],
-        4: [1, 1, 1, 1],
-        5: [1, 0, 0, 1],
-        6: [0, 0, 0, 0],
-      },
-    },
-  },
-  X: {
-    unicode: 88,
-    glyph: {
-      rows: {
-        0: [0, 0, 0, 0],
-        1: [1, 0, 0, 1],
-        2: [0, 1, 1, 0],
-        3: [0, 1, 1, 0],
-        4: [0, 1, 1, 0],
-        5: [1, 0, 0, 1],
-        6: [0, 0, 0, 0],
-      },
-    },
-  },
-  Y: {
-    unicode: 89,
-    glyph: {
-      rows: {
-        0: [0, 0, 0, 0],
-        1: [1, 0, 0, 1],
-        2: [1, 0, 0, 1],
-        3: [0, 1, 1, 0],
-        4: [0, 1, 1, 0],
-        5: [0, 1, 1, 0],
-        6: [0, 0, 0, 0],
-      },
-    },
-  },
-  Z: {
-    unicode: 90,
-    glyph: {
-      rows: {
-        0: [0, 0, 0, 0],
-        1: [1, 1, 1, 1],
-        2: [0, 0, 1, 0],
-        3: [0, 1, 0, 0],
-        4: [1, 0, 0, 0],
-        5: [1, 1, 1, 1],
-        6: [0, 0, 0, 0],
-      },
-    },
-  },
-  // Symbols
-  '-': {
-    unicode: 45,
-    glyph: {
-      rows: {
-        0: [0, 0, 0, 0],
-        1: [0, 0, 0, 0],
-        2: [0, 0, 0, 0],
-        3: [1, 1, 1, 1],
-        4: [0, 0, 0, 0],
-        5: [0, 0, 0, 0],
-        6: [0, 0, 0, 0],
-      },
-    },
-  },
-  '|': {
-    unicode: 124,
-    glyph: {
-      rows: {
-        0: [0, 0, 0, 0],
-        1: [0, 1, 1, 0],
-        2: [0, 1, 1, 0],
-        3: [0, 1, 1, 0],
-        4: [0, 1, 1, 0],
-        5: [0, 1, 1, 0],
-        6: [0, 0, 0, 0],
-      },
-    },
-  },
-  "'": {
-    unicode: 39,
-    glyph: {
-      rows: {
-        0: [0, 0, 0, 0],
-        1: [0, 1, 0, 0],
-        2: [0, 1, 0, 0],
-        3: [0, 0, 0, 0],
-        4: [0, 0, 0, 0],
-        5: [0, 0, 0, 0],
-        6: [0, 0, 0, 0],
-      },
-    },
-  },
-  '"': {
-    unicode: 34,
-    glyph: {
-      rows: {
-        0: [0, 0, 0, 0],
-        1: [1, 0, 1, 0],
-        2: [1, 0, 1, 0],
-        3: [0, 0, 0, 0],
-        4: [0, 0, 0, 0],
-        5: [0, 0, 0, 0],
-        6: [0, 0, 0, 0],
-      },
-    },
-  },
-  '?': {
-    unicode: 63,
-    glyph: {
-      rows: {
-        0: [0, 0, 0, 0],
-        1: [1, 1, 1, 1],
-        2: [0, 0, 0, 1],
-        3: [0, 1, 1, 0],
-        4: [0, 0, 0, 0],
-        5: [0, 1, 1, 0],
-        6: [0, 0, 0, 0],
-      },
-    },
-  },
-  '!': {
-    unicode: 33,
-    glyph: {
-      rows: {
-        0: [0, 0, 0, 0],
-        1: [0, 1, 1, 0],
-        2: [0, 1, 1, 0],
-        3: [0, 1, 1, 0],
-        4: [0, 0, 0, 0],
-        5: [0, 1, 1, 0],
-        6: [0, 0, 0, 0],
-      },
-    },
-  },
+// Unicode mappings for symbols
+const SYMBOL_UNICODE_MAP: Record<string, number> = {
+  '-': 45,
+  '|': 124,
+  "'": 39,
+  '"': 34,
+  '?': 63,
+  '!': 33,
 };
+
+// Build combined glyph map from alphabet module
+const GLYPHS: Record<string, { glyph: Glyph; unicode: number }> = {};
+
+// Add all letters from ALPHABET
+for (const [letter, glyph] of Object.entries(ALPHABET)) {
+  GLYPHS[letter] = {
+    glyph,
+    unicode: LETTER_UNICODE_MAP[letter],
+  };
+}
+
+// Add all symbols from SYMBOLS
+for (const [symbol, glyph] of Object.entries(SYMBOLS)) {
+  GLYPHS[symbol] = {
+    glyph,
+    unicode: SYMBOL_UNICODE_MAP[symbol],
+  };
+}
+
+console.log(`📖 Loaded ${Object.keys(GLYPHS).length} glyphs from alphabet module`);
 
 // ============================================================================
 // Helper Functions
 // ============================================================================
 
 /**
- * Convert a grid-based glyph (7 rows × 4 columns) to SVG path
+ * Convert a grid-based glyph (7 rows × variable columns) to SVG path
+ * Handles variable-width characters from alphabet module (1-5 columns)
  */
 function gridToSVGPath(rows: Record<number, number[]>): string {
   const paths: string[] = [];
   const blockSize = CONFIG.blockSize;
 
   for (let row = 0; row < 7; row++) {
-    const columns = rows[row] || [0, 0, 0, 0];
+    const columns = rows[row] || [];
     for (let col = 0; col < columns.length; col++) {
       if (columns[col] === 1) {
         const x = col * blockSize;
@@ -530,9 +144,10 @@ function gridToSVGPath(rows: Record<number, number[]>): string {
 
 /**
  * Generate individual SVG files for each glyph
+ * Handles variable-width characters (1-5 columns) from alphabet module
  */
 function generateGlyphSVGs(): void {
-  console.log('📐 Generating SVG glyphs from grid data...');
+  console.log('📐 Generating SVG glyphs from alphabet module...');
 
   if (!existsSync(CONFIG.tempDir)) {
     mkdirSync(CONFIG.tempDir, { recursive: true });
@@ -541,8 +156,11 @@ function generateGlyphSVGs(): void {
   let count = 0;
   for (const [char, { glyph }] of Object.entries(GLYPHS)) {
     const svgPath = gridToSVGPath(glyph.rows);
-    const width = 4 * CONFIG.blockSize; // 4 columns
-    const height = 7 * CONFIG.blockSize; // 7 rows
+
+    // Calculate width based on actual glyph columns (variable width support)
+    const maxCols = Math.max(...Object.values(glyph.rows).map((row) => row.length));
+    const width = maxCols * CONFIG.blockSize;
+    const height = 7 * CONFIG.blockSize; // 7 rows (standard)
 
     const svg = `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">
@@ -553,7 +171,7 @@ function generateGlyphSVGs(): void {
     count++;
   }
 
-  console.log(`✅ Generated ${count} SVG glyphs`);
+  console.log(`✅ Generated ${count} SVG glyphs from alphabet module`);
 }
 
 /**

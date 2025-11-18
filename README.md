@@ -8,7 +8,9 @@ This package provides:
 
 - **Grid-based pixel art font** (OpenCodeLogo) with 32 glyphs (A-Z + 6 symbols: `-|'"?!`)
 - **Web fonts** in multiple formats (WOFF2, WOFF, TTF) optimized for modern browsers
-- **JavaScript API** for programmatic SVG text generation
+- **JavaScript API** for programmatic SVG text generation (two approaches)
+  - Simple font-based SVG generation (`convertTextToSVG`)
+  - Advanced blocky pixel-art rendering (`blockyTextToSVG`)
 - **CSS helper** for easy font integration
 
 ## Installation
@@ -19,9 +21,27 @@ npm install @pantheon-org/opencode-font
 
 ## Quick Start
 
-### Option 1: JavaScript API (Text-to-SVG)
+### Option 1A: Blocky Pixel-Art SVG (Recommended for Logos)
 
-Generate SVG text programmatically with the included font reference:
+Generate pixel-perfect SVG with blocky rendering and theme support:
+
+```js
+import { blockyTextToSVG } from '@pantheon-org/opencode-font';
+
+const svg = blockyTextToSVG('OPENCODE', {
+  theme: 'dark', // or 'light'
+  blockSize: 6,
+  charSpacing: 1,
+  optimize: true, // Reduces file size by 30-40%
+});
+
+// Inject into your page
+document.getElementById('logo').innerHTML = svg;
+```
+
+### Option 1B: Simple Font-Based SVG
+
+Generate SVG text using the OpenCodeLogo font:
 
 ```js
 import { convertTextToSVG } from '@pantheon-org/opencode-font';
@@ -77,7 +97,54 @@ For more control, define your own `@font-face`:
 
 ## API Reference
 
-### `convertTextToSVG(text, options)`
+### Blocky Pixel-Art API
+
+#### `blockyTextToSVG(text, options)`
+
+Converts text to blocky pixel-art SVG with optimized paths and theme support.
+
+**Parameters:**
+
+- `text` (string) — Text to convert (A-Z, `-|'"?!` supported)
+- `options` (object) — Configuration options:
+  - `theme` ('light' | 'dark') — Color theme (default: `'light'`)
+  - `blockSize` (number) — Size of each pixel block in pixels (default: `6`)
+  - `charSpacing` (number) — Space between characters in blocks (default: `1`)
+  - `optimize` (boolean) — Enable SVG path optimization (default: `true`)
+
+**Returns:** SVG string with pixel-perfect rendering
+
+**Example:**
+
+```js
+const svg = blockyTextToSVG('HELLO', {
+  theme: 'dark',
+  blockSize: 6,
+  charSpacing: 1,
+  optimize: true,
+});
+```
+
+**Features:**
+
+- **Pixel-perfect rendering** - No font rendering inconsistencies across browsers
+- **Theme support** - Built-in light/dark modes using OpenCode.ai colors
+- **Variable-width characters** - 1-5 columns depending on character
+- **SVG optimization** - Merges adjacent blocks for 30-40% size reduction
+- **Consistent output** - Identical across all browsers and platforms
+
+**When to use:**
+
+- Logos and headers
+- Pixel-art style graphics
+- When you need exact pixel control
+- When consistency across browsers is critical
+
+---
+
+### Simple Font-Based API
+
+#### `convertTextToSVG(text, options)`
 
 Converts text to an SVG string using the OpenCodeLogo font.
 
@@ -105,6 +172,28 @@ const svg = convertTextToSVG('HELLO', {
   ariaLabel: 'Hello message in pixel art style',
 });
 ```
+
+**When to use:**
+
+- Text-heavy content where file size matters
+- When you want browser-native font rendering
+- Dynamic text that changes frequently
+
+---
+
+### API Comparison
+
+| Feature             | `convertTextToSVG()`      | `blockyTextToSVG()`            |
+| ------------------- | ------------------------- | ------------------------------ |
+| Rendering           | Font-based `<text>`       | Pixel-perfect paths            |
+| Browser consistency | Depends on font rendering | Identical everywhere           |
+| Theme support       | No                        | Yes (light/dark)               |
+| Variable width      | Font-dependent            | Yes (1-5 columns)              |
+| Optimization        | No                        | Yes (30-40% size reduction)    |
+| Customization       | Limited                   | Full control (blocks, spacing) |
+| **Recommended for** | Text-heavy content        | Logos, headers, pixel-art      |
+
+For complete blocky text API documentation, see [`src/alphabet/README.md`](src/alphabet/README.md).
 
 ## Font Specifications
 
