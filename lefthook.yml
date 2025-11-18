@@ -9,7 +9,7 @@ pre-commit:
       glob: "src/**/*.{ts,tsx,js,jsx}"
     typecheck:
       run: "npm run typecheck"
-      glob: "**/*"
+      glob: "**/*.{ts,tsx}"
     test:
       run: "bun test"
       glob: "**/*"
