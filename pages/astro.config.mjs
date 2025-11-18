@@ -4,7 +4,7 @@ import rehypeMermaid from 'rehype-mermaid';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://pantheon-org.github.io',
+  site: 'https://pantheon-ai.github.io',
   base: '/opencode-font',
   outDir: './dist',
   markdown: {
@@ -55,7 +55,7 @@ export default defineConfig({
         {
           icon: 'github',
           label: 'GitHub',
-          href: 'https://github.com/pantheon-org/opencode-font',
+          href: 'https://github.com/pantheon-ai/opencode-font',
         },
         {
           icon: 'discord',
@@ -64,7 +64,7 @@ export default defineConfig({
         },
       ],
       editLink: {
-        baseUrl: 'https://github.com/pantheon-org/opencode-font/edit/main/',
+        baseUrl: 'https://github.com/pantheon-ai/opencode-font/edit/main/',
       },
       customCss: ['./src/styles/custom.css'],
       defaultLocale: 'root',

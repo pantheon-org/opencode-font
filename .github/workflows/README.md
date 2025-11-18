@@ -25,7 +25,7 @@ This directory contains GitHub Actions workflows that automate testing, versioni
 5. Build Astro site to `pages/dist/`
 6. Deploy to GitHub Pages via Actions
 
-**Deployment URL**: https://pantheon-org.github.io/opencode-font/
+**Deployment URL**: https://pantheon-ai.github.io/opencode-font/
 
 #### Chores — Pages Configuration (`chores-pages.yml`)
 
@@ -166,7 +166,7 @@ This directory contains GitHub Actions workflows that automate testing, versioni
 
 - Builds the project
 - Deploys `demo/` directory to `gh-pages` branch
-- Accessible at: `https://pantheon-org.github.io/opencode-font/`
+- Accessible at: `https://pantheon-ai.github.io/opencode-font/`
 
 #### Job 3: Create GitHub Release
 

@@ -359,6 +359,6 @@ jobs:
           echo "✅ Release: ${{ needs.create-release.result }}"
           echo ""
           echo "🔗 Links:"
-          echo "  📦 npm: https://www.npmjs.com/package/@pantheon-org/opencode-font/v/${{ steps.version.outputs.version }}"
-          echo "  📚 Demo: https://pantheon-org.github.io/opencode-font/"
+          echo "  📦 npm: https://www.npmjs.com/package/@pantheon-ai/opencode-font/v/${{ steps.version.outputs.version }}"
+          echo "  📚 Demo: https://pantheon-ai.github.io/opencode-font/"
           echo "  🏷️ Release: https://github.com/${{ github.repository }}/releases/tag/${{ steps.version.outputs.tag }}"

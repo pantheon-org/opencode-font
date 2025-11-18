@@ -90,7 +90,7 @@ The build process follows these steps:
 
 Key settings:
 
-- **Site**: `https://pantheon-org.github.io`
+- **Site**: `https://pantheon-ai.github.io`
 - **Base**: `/opencode-font/` (GitHub Pages subdirectory)
 - **Integration**: Starlight (documentation theme)
 
@@ -114,7 +114,7 @@ The site automatically deploys to GitHub Pages via GitHub Actions when changes a
 
 ### Deployment URL
 
-https://pantheon-org.github.io/opencode-font/
+https://pantheon-ai.github.io/opencode-font/
 
 ## Custom Styling
 
@@ -195,4 +195,5 @@ When making changes to the documentation:
 ## License
 
 MIT - See the root LICENSE file for details.
+
 # Documentation site configuration

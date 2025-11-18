@@ -3,11 +3,11 @@ title: OpenCode Font Documentation
 description: Blocky pixel-art font and text-to-SVG conversion library
 ---
 
-# @pantheon-org/opencode-font
+# @pantheon-ai/opencode-font
 
 OpenCode-style font package with text-to-SVG conversion and web fonts for pixel-art style text rendering.
 
-**📖 [View Interactive Documentation](https://pantheon-org.github.io/opencode-font/)**
+**📖 [View Interactive Documentation](https://pantheon-ai.github.io/opencode-font/)**
 
 ## Overview
 
@@ -23,7 +23,7 @@ This package provides:
 ## Installation
 
 ```bash
-npm install @pantheon-org/opencode-font
+npm install @pantheon-ai/opencode-font
 ```
 
 ## Quick Start
@@ -33,7 +33,7 @@ npm install @pantheon-org/opencode-font
 Generate pixel-perfect SVG with blocky rendering and theme support:
 
 ```js
-import { blockyTextToSVG } from '@pantheon-org/opencode-font';
+import { blockyTextToSVG } from '@pantheon-ai/opencode-font';
 
 const svg = blockyTextToSVG('OPENCODE', {
   theme: 'dark', // or 'light'
@@ -51,7 +51,7 @@ document.getElementById('logo').innerHTML = svg;
 Generate SVG text using the OpenCodeLogo font:
 
 ```js
-import { convertTextToSVG } from '@pantheon-org/opencode-font';
+import { convertTextToSVG } from '@pantheon-ai/opencode-font';
 
 const svg = convertTextToSVG('OPENCODE', {
   fontSize: 48,
@@ -68,7 +68,7 @@ Use the font directly in your CSS:
 
 ```html
 <!-- In your HTML -->
-<link rel="stylesheet" href="node_modules/@pantheon-org/opencode-font/css/opencode-font.css" />
+<link rel="stylesheet" href="node_modules/@pantheon-ai/opencode-font/css/opencode-font.css" />
 
 <style>
   .pixel-text {
@@ -89,8 +89,8 @@ For more control, define your own `@font-face`:
 @font-face {
   font-family: 'OpenCodeLogo';
   src:
-    url('node_modules/@pantheon-org/opencode-font/fonts/OpenCodeLogo.woff2') format('woff2'),
-    url('node_modules/@pantheon-org/opencode-font/fonts/OpenCodeLogo.woff') format('woff');
+    url('node_modules/@pantheon-ai/opencode-font/fonts/OpenCodeLogo.woff2') format('woff2'),
+    url('node_modules/@pantheon-ai/opencode-font/fonts/OpenCodeLogo.woff') format('woff');
   font-weight: normal;
   font-style: normal;
   font-display: swap; /* Recommended for web performance */
@@ -323,7 +323,7 @@ const svg = convertTextToSVG(text.toUpperCase(), options);
 
 **Solution**:
 
-- If using from npm: Fonts should be present in `node_modules/@pantheon-org/opencode-font/fonts/`
+- If using from npm: Fonts should be present in `node_modules/@pantheon-ai/opencode-font/fonts/`
 - If using from source: Run `bun run generate:fonts` to generate fonts locally
 
 ### Build/CI issues with font generation

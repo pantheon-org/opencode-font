@@ -15,7 +15,7 @@
  *
  * @example
  * ```typescript
- * import { convertTextToSVG } from '@pantheon-org/opencode-font';
+ * import { convertTextToSVG } from '@pantheon-ai/opencode-font';
  *
  * // Basic usage
  * const svg = convertTextToSVG('HELLO');

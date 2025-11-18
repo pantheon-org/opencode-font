@@ -14,7 +14,7 @@ Complete blocky pixel-art text rendering system for the OpenCode font.
 ## Quick Start
 
 ```typescript
-import { blockyTextToSVG } from '@pantheon-org/opencode-font';
+import { blockyTextToSVG } from '@pantheon-ai/opencode-font';
 
 // Generate blocky pixel-art SVG
 const svg = blockyTextToSVG('HELLO', {
@@ -67,7 +67,7 @@ Convert text to an array of block coordinates for custom rendering.
 **Example:**
 
 ```typescript
-import { textToBlocks } from '@pantheon-org/opencode-font';
+import { textToBlocks } from '@pantheon-ai/opencode-font';
 
 const blocks = textToBlocks('HELLO', {
   theme: 'dark',
@@ -183,7 +183,7 @@ When `optimize: true` (default), the module merges adjacent blocks of the same c
 ### Custom Rendering
 
 ```typescript
-import { textToBlocks, calculateWidth } from '@pantheon-org/opencode-font';
+import { textToBlocks, calculateWidth } from '@pantheon-ai/opencode-font';
 
 const options = {
   theme: 'dark' as const,
@@ -203,7 +203,7 @@ const height = 7 * options.blockSize;
 ### Direct Glyph Access
 
 ```typescript
-import { ALPHABET, SYMBOLS } from '@pantheon-org/opencode-font';
+import { ALPHABET, SYMBOLS } from '@pantheon-ai/opencode-font';
 
 const glyphA = ALPHABET.A;
 const glyphHyphen = SYMBOLS['-'];
@@ -233,7 +233,7 @@ If you're currently using `convertTextToSVG`:
 
 ```typescript
 // Old: Simple font-based
-import { convertTextToSVG } from '@pantheon-org/opencode-font';
+import { convertTextToSVG } from '@pantheon-ai/opencode-font';
 const svg = convertTextToSVG('HELLO', { fontSize: 42 });
 ```
 
@@ -241,7 +241,7 @@ Consider `blockyTextToSVG` for:
 
 ```typescript
 // New: Blocky pixel-art style
-import { blockyTextToSVG } from '@pantheon-org/opencode-font';
+import { blockyTextToSVG } from '@pantheon-ai/opencode-font';
 const svg = blockyTextToSVG('HELLO', {
   theme: 'dark',
   blockSize: 6,
@@ -256,7 +256,7 @@ Both APIs coexist - use whichever fits your needs!
 ### Logo Rendering
 
 ```typescript
-import { blockyTextToSVG } from '@pantheon-org/opencode-font';
+import { blockyTextToSVG } from '@pantheon-ai/opencode-font';
 
 const logo = blockyTextToSVG('OPENCODE', {
   theme: 'light',
