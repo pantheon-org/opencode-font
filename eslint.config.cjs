@@ -1,6 +1,7 @@
 module.exports = [
   {
     files: ['**/*.ts', '**/*.tsx'],
+    ignores: ['node_modules/**', 'dist/**', 'bun.lock', 'package-lock.json', '*.d.ts'],
     languageOptions: {
       parser: require('@typescript-eslint/parser'),
       parserOptions: {
