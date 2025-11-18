@@ -6,6 +6,9 @@
     <title>OpenCode Font — Demo</title>
     <link rel="stylesheet" href="../css/opencode-font.css" />
     <style>
+      * {
+        box-sizing: border-box;
+      }
       body {
         font-family:
           system-ui,
@@ -14,38 +17,233 @@
           Roboto,
           sans-serif;
         padding: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+        background: #f5f5f5;
+        line-height: 1.6;
+      }
+      h1 {
+        color: #333;
+        border-bottom: 3px solid #00c896;
+        padding-bottom: 0.5rem;
+      }
+      h2 {
+        color: #444;
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+      }
+      .section {
+        background: white;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       }
       .preview {
-        border: 1px dashed #ddd;
-        padding: 1rem;
+        border: 2px dashed #ddd;
+        padding: 1.5rem;
         display: inline-block;
+        background: #fafafa;
+        border-radius: 4px;
+        min-height: 100px;
+        min-width: 300px;
       }
       .controls {
         margin-bottom: 1rem;
       }
+      .controls label {
+        display: block;
+        font-weight: 600;
+        margin-top: 0.5rem;
+        margin-bottom: 0.25rem;
+        color: #555;
+      }
       textarea {
         width: 100%;
         height: 4rem;
+        padding: 0.5rem;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-family: monospace;
+        font-size: 14px;
+      }
+      input[type='number'],
+      input[type='color'] {
+        padding: 0.5rem;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 14px;
+      }
+      button {
+        background: #00c896;
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: 600;
+        margin-top: 1rem;
+        transition: background 0.2s;
+      }
+      button:hover {
+        background: #00a076;
+      }
+      .example-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-top: 1rem;
+      }
+      .example {
+        padding: 1rem;
+        background: #fafafa;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+      }
+      .example h3 {
+        margin-top: 0;
+        font-size: 1rem;
+        color: #666;
+        margin-bottom: 0.75rem;
+      }
+      .example-content {
+        font-family: 'OpenCodeLogo', monospace;
+        font-size: 24px;
+        text-transform: uppercase;
+        margin-bottom: 0.5rem;
+      }
+      .example-code {
+        font-size: 12px;
+        color: #666;
+        font-family: monospace;
+        background: #fff;
+        padding: 0.5rem;
+        border-radius: 4px;
+        overflow-x: auto;
+      }
+      .charset {
+        font-family: 'OpenCodeLogo', monospace;
+        font-size: 32px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        word-wrap: break-word;
+        background: #fafafa;
+        padding: 1rem;
+        border-radius: 4px;
+        border: 1px solid #e0e0e0;
+      }
+      code {
+        background: #f0f0f0;
+        padding: 0.2rem 0.4rem;
+        border-radius: 3px;
+        font-family: monospace;
+        font-size: 0.9em;
+      }
+      .info-box {
+        background: #e3f2fd;
+        border-left: 4px solid #2196f3;
+        padding: 1rem;
+        margin: 1rem 0;
+        border-radius: 4px;
+      }
+      .info-box strong {
+        color: #1976d2;
       }
     </style>
   </head>
   <body>
-    <h1>OpenCode Font — SVG text demo</h1>
+    <h1>OpenCode Font — Interactive Demo</h1>
 
-    <p>
-      Type text below and click <strong>Generate SVG</strong>. This demo uses the bundled CSS to
-      register the font-family — replace the font files in <code>fonts/</code> with real files.
-    </p>
-
-    <div class="controls">
-      <label>Text</label>
-      <textarea id="text">Hello OpenCode</textarea>
-      <label>Font size</label>
-      <input id="size" type="number" value="48" />
-      <button id="gen">Generate SVG</button>
+    <div class="info-box">
+      <strong>About this font:</strong> OpenCodeLogo is a pixel-art style font with 32 glyphs (A-Z +
+      6 symbols: <code>-|'"?!</code>). Total size: 9.5 KB (all formats). Character input is
+      automatically converted to uppercase.
     </div>
 
-    <div class="preview opencode-font" id="out" aria-live="polite"></div>
+    <div class="section">
+      <h2>🎨 Interactive SVG Generator</h2>
+      <p>
+        Generate SVG text programmatically using the JavaScript API. Try different text, sizes, and
+        colors!
+      </p>
+
+      <div class="controls">
+        <label>Text</label>
+        <textarea id="text">HELLO OPENCODE</textarea>
+
+        <label>Font Size (px)</label>
+        <input id="size" type="number" value="48" min="12" max="128" />
+
+        <label>Color</label>
+        <input id="color" type="color" value="#00c896" />
+
+        <button id="gen">Generate SVG</button>
+      </div>
+
+      <div class="preview" id="out" aria-live="polite"></div>
+    </div>
+
+    <div class="section">
+      <h2>📝 Character Set</h2>
+      <p>All supported characters (uppercase only):</p>
+      <div class="charset">ABCDEFGHIJKLMNOPQRSTUVWXYZ -|'"?!</div>
+    </div>
+
+    <div class="section">
+      <h2>✨ Style Examples</h2>
+      <div class="example-grid">
+        <div class="example">
+          <h3>Default Style</h3>
+          <div class="example-content" style="color: #000">OPENCODE</div>
+          <div class="example-code">color: #000; font-size: 24px;</div>
+        </div>
+
+        <div class="example">
+          <h3>Retro Green</h3>
+          <div class="example-content" style="color: #00ff00">MATRIX</div>
+          <div class="example-code">color: #00ff00; font-size: 24px;</div>
+        </div>
+
+        <div class="example">
+          <h3>Terminal Style</h3>
+          <div class="example-content" style="color: #00c896; background: #1a1a1a; padding: 0.5rem">
+            TERMINAL
+          </div>
+          <div class="example-code">color: #00c896; background: #1a1a1a;</div>
+        </div>
+
+        <div class="example">
+          <h3>Warning</h3>
+          <div class="example-content" style="color: #ff9800">ERROR!</div>
+          <div class="example-code">color: #ff9800; font-size: 24px;</div>
+        </div>
+
+        <div class="example">
+          <h3>Danger</h3>
+          <div class="example-content" style="color: #f44336">ALERT-</div>
+          <div class="example-code">color: #f44336; font-size: 24px;</div>
+        </div>
+
+        <div class="example">
+          <h3>Info</h3>
+          <div class="example-content" style="color: #2196f3">STATUS OK</div>
+          <div class="example-code">color: #2196f3; font-size: 24px;</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>🔍 Font Details</h2>
+      <ul>
+        <li><strong>Font Family:</strong> OpenCodeLogo</li>
+        <li><strong>Character Set:</strong> ASCII uppercase (A-Z) + symbols (-|'"?!)</li>
+        <li><strong>Total Glyphs:</strong> 32</li>
+        <li><strong>Design:</strong> 7×4 grid-based pixel art</li>
+        <li><strong>File Sizes:</strong> WOFF2 (1.3 KB), WOFF (1.8 KB), TTF (6.4 KB)</li>
+        <li><strong>Recommended Format:</strong> WOFF2 for modern browsers</li>
+      </ul>
+    </div>
 
     <script>
       // Simple client-side converter that mirrors the library API for demonstration.
@@ -57,9 +255,11 @@
 
       function convertTextToSVG(text, opts) {
         opts = opts || {};
+        // Auto-convert to uppercase since font only supports uppercase
+        text = text.toUpperCase();
         var fontSize = opts.fontSize || 48;
         var color = opts.color || '#000';
-        var fontFamily = opts.fontFamily || 'OpenCode, monospace';
+        var fontFamily = opts.fontFamily || 'OpenCodeLogo, monospace';
         var width = opts.width || text.length * (fontSize * 0.6);
         var height = opts.height || fontSize * 1.2;
         var escaped = escapeXml(text);
@@ -87,15 +287,26 @@
         return svg;
       }
 
-      document.getElementById('gen').addEventListener('click', function () {
+      // Generate SVG function
+      function generate() {
         var text = document.getElementById('text').value;
         var size = parseInt(document.getElementById('size').value, 10) || 48;
-        var svg = convertTextToSVG(text, { fontSize: size });
+        var color = document.getElementById('color').value || '#000';
+        var svg = convertTextToSVG(text, { fontSize: size, color: color });
         var out = document.getElementById('out');
         out.innerHTML = svg;
-      });
+      }
 
-      document.getElementById('gen').click();
+      // Event listeners
+      document.getElementById('gen').addEventListener('click', generate);
+
+      // Allow real-time updates on input change (optional)
+      document.getElementById('text').addEventListener('input', generate);
+      document.getElementById('size').addEventListener('input', generate);
+      document.getElementById('color').addEventListener('input', generate);
+
+      // Initial generation
+      generate();
     </script>
   </body>
 </html>
