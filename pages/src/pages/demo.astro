@@ -1,0 +1,342 @@
+---
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro';
+const title = 'Interactive Demo';
+const description = 'Try out the OpenCode Font APIs with live code examples';
+---
+
+<StarlightPage frontmatter={{ title, description }}>
+
+<div class="demo-container">
+
+<h2>Blocky Text Demo</h2>
+
+<p>Experience the pixel-art rendering with theme support.</p>
+
+<div class="demo-section">
+  <div class="input-group">
+    <label for="blocky-text">Text (A-Z and symbols)</label>
+    <input 
+      type="text" 
+      id="blocky-text" 
+      value="OPENCODE" 
+      maxlength="20"
+      placeholder="HELLO WORLD"
+    />
+  </div>
+
+  <div class="controls">
+    <div class="control-group">
+      <label for="theme">Theme</label>
+      <select id="theme">
+        <option value="dark" selected>Dark</option>
+        <option value="light">Light</option>
+      </select>
+    </div>
+
+    <div class="control-group">
+      <label for="blockSize">Block Size</label>
+      <input type="range" id="blockSize" min="3" max="12" value="6" />
+      <span id="blockSize-value">6</span>
+    </div>
+
+    <div class="control-group">
+      <label for="charSpacing">Character Spacing</label>
+      <input type="range" id="charSpacing" min="0" max="3" value="1" />
+      <span id="charSpacing-value">1</span>
+    </div>
+
+    <div class="control-group checkbox">
+      <input type="checkbox" id="optimize" checked />
+      <label for="optimize">Optimize SVG (30-40% smaller)</label>
+    </div>
+
+  </div>
+
+  <div class="preview" id="blocky-preview">
+  </div>
+
+  <div class="code-output">
+    <div class="code-header">
+      <span>Generated SVG</span>
+      <button id="copy-blocky" class="copy-btn">Copy</button>
+    </div>
+    <pre><code id="blocky-code"></code></pre>
+  </div>
+</div>
+
+<hr />
+
+<h2>Simple Text Demo</h2>
+
+<p>Font-based SVG generation with custom styling.</p>
+
+<div class="demo-section">
+  <div class="input-group">
+    <label for="simple-text">Text (A-Z and symbols)</label>
+    <input 
+      type="text" 
+      id="simple-text" 
+      value="HELLO" 
+      maxlength="20"
+      placeholder="HELLO"
+    />
+  </div>
+
+  <div class="controls">
+    <div class="control-group">
+      <label for="fontSize">Font Size</label>
+      <input type="range" id="fontSize" min="24" max="96" value="48" />
+      <span id="fontSize-value">48</span>
+    </div>
+
+    <div class="control-group">
+      <label for="color">Color</label>
+      <input type="color" id="color" value="#00ff00" />
+      <span id="color-value">#00ff00</span>
+    </div>
+
+  </div>
+
+  <div class="preview" id="simple-preview">
+  </div>
+
+  <div class="code-output">
+    <div class="code-header">
+      <span>Generated SVG</span>
+      <button id="copy-simple" class="copy-btn">Copy</button>
+    </div>
+    <pre><code id="simple-code"></code></pre>
+  </div>
+</div>
+
+</div>
+
+<style>
+  .demo-container {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .demo-section {
+    background: var(--color-background-weak);
+    border: 1px solid var(--color-border-weak);
+    border-radius: 8px;
+    padding: 2rem;
+    margin: 2rem 0;
+  }
+
+  .input-group {
+    margin-bottom: 1.5rem;
+  }
+
+  .input-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--color-text-strong);
+  }
+
+  .input-group input[type="text"] {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1rem;
+    font-family: var(--__sl-font);
+    background: var(--color-background);
+    border: 1px solid var(--color-border-weak);
+    border-radius: 4px;
+    color: var(--color-text);
+    text-transform: uppercase;
+  }
+
+  .controls {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .control-group.checkbox {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .control-group label {
+    font-weight: 500;
+    color: var(--color-text-strong);
+  }
+
+  .control-group select,
+  .control-group input[type="range"],
+  .control-group input[type="color"] {
+    padding: 0.5rem;
+    background: var(--color-background);
+    border: 1px solid var(--color-border-weak);
+    border-radius: 4px;
+    color: var(--color-text);
+    font-family: var(--__sl-font);
+  }
+
+  .control-group input[type="range"] {
+    width: 100%;
+  }
+
+  .control-group span {
+    font-family: var(--__sl-font);
+    color: var(--color-text-weak);
+    font-size: 0.875rem;
+  }
+
+  .preview {
+    min-height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-background);
+    border: 1px solid var(--color-border-weak);
+    border-radius: 4px;
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .code-output {
+    background: var(--color-background);
+    border: 1px solid var(--color-border-weak);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .code-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background: var(--color-background-weak);
+    border-bottom: 1px solid var(--color-border-weak);
+  }
+
+  .code-header span {
+    font-weight: 500;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    color: var(--color-text-strong);
+  }
+
+  .copy-btn {
+    padding: 0.25rem 0.75rem;
+    background: var(--color-background-strong);
+    color: var(--color-text-inverted);
+    border: none;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    cursor: pointer;
+    font-family: var(--__sl-font);
+  }
+
+  .copy-btn:hover {
+    background: var(--color-background-strong-hover);
+  }
+
+  .code-output pre {
+    margin: 0;
+    padding: 1rem;
+    overflow-x: auto;
+  }
+
+  .code-output code {
+    font-family: var(--__sl-font);
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: var(--color-text);
+  }
+</style>
+
+<script>
+  // Import the library functions
+  import { blockyTextToSVG, convertTextToSVG } from '../utils/alphabet';
+
+  // Blocky Text Demo
+  const blockyText = document.getElementById('blocky-text') as HTMLInputElement;
+  const theme = document.getElementById('theme') as HTMLSelectElement;
+  const blockSize = document.getElementById('blockSize') as HTMLInputElement;
+  const charSpacing = document.getElementById('charSpacing') as HTMLInputElement;
+  const optimize = document.getElementById('optimize') as HTMLInputElement;
+  const blockyPreview = document.getElementById('blocky-preview') as HTMLElement;
+  const blockyCode = document.getElementById('blocky-code') as HTMLElement;
+  const copyBlocky = document.getElementById('copy-blocky') as HTMLButtonElement;
+
+  function updateBlockyDemo() {
+    const text = blockyText.value.toUpperCase() || 'OPENCODE';
+    const svg = blockyTextToSVG(text, {
+      theme: theme.value as 'light' | 'dark',
+      blockSize: parseInt(blockSize.value),
+      charSpacing: parseInt(charSpacing.value),
+      optimize: optimize.checked,
+    });
+
+    blockyPreview.innerHTML = svg;
+    blockyCode.textContent = svg;
+
+    // Update value displays
+    document.getElementById('blockSize-value')!.textContent = blockSize.value;
+    document.getElementById('charSpacing-value')!.textContent = charSpacing.value;
+  }
+
+  blockyText.addEventListener('input', updateBlockyDemo);
+  theme.addEventListener('change', updateBlockyDemo);
+  blockSize.addEventListener('input', updateBlockyDemo);
+  charSpacing.addEventListener('input', updateBlockyDemo);
+  optimize.addEventListener('change', updateBlockyDemo);
+
+  copyBlocky.addEventListener('click', () => {
+    navigator.clipboard.writeText(blockyCode.textContent || '');
+    copyBlocky.textContent = 'Copied!';
+    setTimeout(() => copyBlocky.textContent = 'Copy', 2000);
+  });
+
+  // Simple Text Demo
+  const simpleText = document.getElementById('simple-text') as HTMLInputElement;
+  const fontSize = document.getElementById('fontSize') as HTMLInputElement;
+  const color = document.getElementById('color') as HTMLInputElement;
+  const simplePreview = document.getElementById('simple-preview') as HTMLElement;
+  const simpleCode = document.getElementById('simple-code') as HTMLElement;
+  const copySimple = document.getElementById('copy-simple') as HTMLButtonElement;
+
+  function updateSimpleDemo() {
+    const text = simpleText.value.toUpperCase() || 'HELLO';
+    const svg = convertTextToSVG(text, {
+      fontSize: parseInt(fontSize.value),
+      color: color.value,
+    });
+
+    simplePreview.innerHTML = svg;
+    simpleCode.textContent = svg;
+
+    // Update value displays
+    document.getElementById('fontSize-value')!.textContent = fontSize.value;
+    document.getElementById('color-value')!.textContent = color.value;
+  }
+
+  simpleText.addEventListener('input', updateSimpleDemo);
+  fontSize.addEventListener('input', updateSimpleDemo);
+  color.addEventListener('input', updateSimpleDemo);
+
+  copySimple.addEventListener('click', () => {
+    navigator.clipboard.writeText(simpleCode.textContent || '');
+    copySimple.textContent = 'Copied!';
+    setTimeout(() => copySimple.textContent = 'Copy', 2000);
+  });
+
+  // Initialize demos
+  updateBlockyDemo();
+  updateSimpleDemo();
+</script>
+
+</StarlightPage>

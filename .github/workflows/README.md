@@ -1,8 +1,55 @@
 # CI/CD Workflow Documentation
 
-This directory contains GitHub Actions workflows that automate testing, versioning, and publishing for the opencode-font package.
+This directory contains GitHub Actions workflows that automate testing, versioning, publishing, and documentation deployment for the opencode-font package.
 
 ## Workflows Overview
+
+### Documentation Deployment Workflows
+
+#### Deploy Documentation (`deploy-docs.yml`)
+
+**Purpose**: Builds and deploys the documentation site to GitHub Pages.
+
+**Triggers**:
+
+- Push to `main` branch (paths: `pages/**`, `src/alphabet/**`, `fonts/**`, `README.md`)
+- Release published
+- Manual workflow dispatch
+
+**Process**:
+
+1. Generate fonts from `src/alphabet/` glyphs
+2. Install dependencies for documentation site
+3. Copy fonts to `pages/public/fonts/`
+4. Transform `README.md` to `pages/src/content/docs/index.md`
+5. Build Astro site to `pages/dist/`
+6. Deploy to GitHub Pages via Actions
+
+**Deployment URL**: https://pantheon-org.github.io/opencode-font/
+
+#### Chores — Pages Configuration (`chores-pages.yml`)
+
+**Purpose**: Verifies GitHub Pages is configured correctly for deployment.
+
+**Triggers**:
+
+- Daily at 00:00 UTC (cron schedule)
+- Manual workflow dispatch
+
+**Process**:
+
+1. Checks GitHub Pages configuration via API
+2. Verifies source is set to "GitHub Actions" (not branch)
+3. Creates issue if misconfigured with remediation steps
+
+**Required Settings**:
+
+- Repository Settings → Pages
+- Build and deployment → Source: **GitHub Actions**
+
+---
+
+### Package Publishing Workflows
 
 ### 1. Validate PR (Lint, Test, Build)
 

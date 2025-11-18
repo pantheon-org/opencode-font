@@ -1,3 +1,8 @@
+---
+title: OpenCode Font Documentation
+description: Blocky pixel-art font and text-to-SVG conversion library
+---
+
 # @pantheon-org/opencode-font
 
 OpenCode-style font package with text-to-SVG conversion and web fonts for pixel-art style text rendering.

@@ -1,0 +1,128 @@
+---
+title: OpenCode Font
+description: Blocky pixel-art font and text-to-SVG conversion library for modern web applications
+template: splash
+hero:
+  title: OpenCode Font
+  tagline: Pixel-perfect blocky text for modern web applications. Two powerful APIs, one beautiful font.
+  actions:
+    - text: Interactive Demo
+      link: /opencode-font/demo/
+      icon: right-arrow
+      variant: primary
+    - text: View on GitHub
+      link: https://github.com/pantheon-org/opencode-font
+      icon: external
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+## Features
+
+<CardGrid>
+  <Card title="Blocky Pixel-Art Rendering" icon="puzzle">
+    Generate pixel-perfect SVG with `blockyTextToSVG()` - perfect for logos, headers, and
+    retro-style text with light/dark theme support.
+  </Card>
+  <Card title="Simple Font-Based SVG" icon="document">
+    Convert text to SVG using `convertTextToSVG()` - ideal for dynamic text rendering with
+    customizable colors and sizes.
+  </Card>
+  <Card title="Web Fonts Included" icon="approve-check">
+    Use the OpenCodeLogo font directly in CSS with WOFF2, WOFF, and TTF formats for maximum browser
+    compatibility.
+  </Card>
+  <Card title="TypeScript Support" icon="seti:typescript">
+    Fully typed APIs with comprehensive IntelliSense support for a great developer experience.
+  </Card>
+</CardGrid>
+
+## Installation
+
+```bash
+npm install @pantheon-org/opencode-font
+```
+
+## Quick Start
+
+### Blocky Pixel-Art SVG (Recommended for Logos)
+
+Perfect for creating retro-style logos and headers with theme support:
+
+```typescript
+import { blockyTextToSVG } from '@pantheon-org/opencode-font';
+
+const svg = blockyTextToSVG('OPENCODE', {
+  theme: 'dark', // or 'light'
+  blockSize: 6, // Size of each pixel block
+  charSpacing: 1, // Space between characters
+  optimize: true, // Reduces file size by 30-40%
+});
+
+// Inject into your page
+document.getElementById('logo').innerHTML = svg;
+```
+
+### Simple Font-Based SVG
+
+Great for dynamic text rendering with custom styling:
+
+```typescript
+import { convertTextToSVG } from '@pantheon-org/opencode-font';
+
+const svg = convertTextToSVG('HELLO', {
+  fontSize: 48,
+  color: '#00ff00',
+});
+
+document.getElementById('text').innerHTML = svg;
+```
+
+### CSS Font Integration
+
+Use the font directly in your stylesheets:
+
+```html
+<link rel="stylesheet" href="node_modules/@pantheon-org/opencode-font/css/opencode-font.css" />
+
+<style>
+  .pixel-text {
+    font-family: 'OpenCodeLogo', monospace;
+    font-size: 48px;
+    color: #00ff00;
+    text-transform: uppercase;
+  }
+</style>
+
+<h1 class="pixel-text">OPENCODE</h1>
+```
+
+## Character Support
+
+The font includes **32 glyphs**:
+
+- **Letters**: A-Z (uppercase only)
+- **Symbols**: `-` (hyphen), `|` (pipe), `'` (apostrophe), `"` (quote), `?` (question), `!` (exclamation)
+
+Check out the [Glyph Showcase](/opencode-font/glyphs/) to see all available characters rendered as SVG.
+
+## API Comparison
+
+| Feature         | `blockyTextToSVG()` | `convertTextToSVG()` |
+| --------------- | ------------------- | -------------------- |
+| Theme Support   | ✅ Light/Dark       | ❌ Single color      |
+| File Size       | Small (optimized)   | Very small           |
+| Customization   | High                | Medium               |
+| Best For        | Logos, headers      | Dynamic text         |
+| Browser Support | All modern browsers | All modern browsers  |
+
+## Try It Out
+
+Visit our [Interactive Demo](/opencode-font/demo/) to experiment with both APIs in real-time and see live examples with different configurations.
+
+## Resources
+
+- [GitHub Repository](https://github.com/pantheon-org/opencode-font)
+- [NPM Package](https://www.npmjs.com/package/@pantheon-org/opencode-font)
+- [Interactive Demo](/opencode-font/demo/)
+- [Glyph Showcase](/opencode-font/glyphs/)
