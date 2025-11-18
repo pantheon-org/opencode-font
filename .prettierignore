@@ -1,0 +1,10 @@
+node_modules
+coverage
+dist
+.bun-cache
+data
+*.wav
+
+tmp_docs_remote/
+docs/dist/
+.tmp/

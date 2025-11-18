@@ -10,8 +10,9 @@ Example:
 
 @font-face {
   font-family: 'OpenCode';
-  src: url('../fonts/OpenCode-Regular.woff2') format('woff2'),
-       url('../fonts/OpenCode-Regular.woff') format('woff');
+  src:
+    url('../fonts/OpenCode-Regular.woff2') format('woff2'),
+    url('../fonts/OpenCode-Regular.woff') format('woff');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -19,8 +20,9 @@ Example:
 
 @font-face {
   font-family: 'OpenCode';
-  src: url('../fonts/OpenCode-Bold.woff2') format('woff2'),
-       url('../fonts/OpenCode-Bold.woff') format('woff');
+  src:
+    url('../fonts/OpenCode-Bold.woff2') format('woff2'),
+    url('../fonts/OpenCode-Bold.woff') format('woff');
   font-weight: 700;
   font-style: bold;
   font-display: swap;

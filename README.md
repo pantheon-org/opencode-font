@@ -18,9 +18,9 @@ npm install /path/to/opencode-font
 Import and use:
 
 ```js
-import { convertTextToSVG } from "@pantheon-org/opencode-font";
+import { convertTextToSVG } from '@pantheon-org/opencode-font';
 
-const svg = convertTextToSVG("OpenCode", { fontSize: 48, color: "#111" });
+const svg = convertTextToSVG('OpenCode', { fontSize: 48, color: '#111' });
 console.log(svg);
 ```
 
@@ -54,7 +54,7 @@ This repo includes a small helper CSS at `css/opencode-font.css` that registers 
 Example (install and include):
 
 ```html
-<link rel="stylesheet" href="node_modules/@pantheon-org/opencode-font/css/opencode-font.css">
+<link rel="stylesheet" href="node_modules/@pantheon-org/opencode-font/css/opencode-font.css" />
 ```
 
 Demo

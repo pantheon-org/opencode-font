@@ -5,7 +5,10 @@
   "main": "dist/index.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
-  "files": ["dist/", "fonts/"],
+  "files": [
+    "dist/",
+    "fonts/"
+  ],
   "type": "module",
   "scripts": {
     "dev": "bun dev",
@@ -13,13 +16,28 @@
     "build": "tsc -p tsconfig.json",
     "test": "bun test",
     "typecheck": "tsc --noEmit",
+    "lint": "eslint 'src/**/*.{ts,tsx,js,jsx}'",
+    "lint:fix": "eslint 'src/**/*.{ts,tsx,js,jsx}' --fix",
+    "format": "prettier --write '**/*.{ts,tsx,js,jsx,json,md,css,scss,html}'",
+    "format:check": "prettier --check '**/*.{ts,tsx,js,jsx,json,md,css,scss,html}'",
     "pack": "npm pack"
   },
-  "keywords": ["font", "svg", "text-to-svg", "opencode"],
+  "keywords": [
+    "font",
+    "svg",
+    "text-to-svg",
+    "opencode"
+  ],
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "@types/jest": "^29.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.47.0",
+    "@typescript-eslint/parser": "^8.47.0",
+    "eslint": "^9.39.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
     "jest": "^29.0.0",
-    "@types/jest": "^29.0.0"
+    "prettier": "^3.6.2"
   }
 }
