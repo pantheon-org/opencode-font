@@ -29,3 +29,5 @@ describe('convertTextToSVG', () => {
     expect(svg).toContain('aria-label="greeting"');
   });
 });
+
+// lefthook test
