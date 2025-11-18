@@ -29,16 +29,7 @@
             "properties": {
               "tag": {
                 "type": "string",
-                "enum": [
-                  "title",
-                  "base",
-                  "link",
-                  "style",
-                  "meta",
-                  "script",
-                  "noscript",
-                  "template"
-                ]
+                "enum": ["title", "base", "link", "style", "meta", "script", "noscript", "template"]
               },
               "attrs": {
                 "type": "object",
@@ -60,9 +51,7 @@
                 "type": "string"
               }
             },
-            "required": [
-              "tag"
-            ],
+            "required": ["tag"],
             "additionalProperties": false
           },
           "default": []
@@ -98,10 +87,7 @@
         },
         "template": {
           "type": "string",
-          "enum": [
-            "doc",
-            "splash"
-          ],
+          "enum": ["doc", "splash"],
           "default": "doc"
         },
         "hero": {
@@ -126,9 +112,7 @@
                       "type": "string"
                     }
                   },
-                  "required": [
-                    "file"
-                  ],
+                  "required": ["file"],
                   "additionalProperties": false
                 },
                 {
@@ -145,10 +129,7 @@
                       "type": "string"
                     }
                   },
-                  "required": [
-                    "dark",
-                    "light"
-                  ],
+                  "required": ["dark", "light"],
                   "additionalProperties": false
                 },
                 {
@@ -158,9 +139,7 @@
                       "type": "string"
                     }
                   },
-                  "required": [
-                    "html"
-                  ],
+                  "required": ["html"],
                   "additionalProperties": false
                 }
               ]
@@ -178,11 +157,7 @@
                   },
                   "variant": {
                     "type": "string",
-                    "enum": [
-                      "primary",
-                      "secondary",
-                      "minimal"
-                    ],
+                    "enum": ["primary", "secondary", "minimal"],
                     "default": "primary"
                   },
                   "icon": {
@@ -452,18 +427,11 @@
                   "attrs": {
                     "type": "object",
                     "additionalProperties": {
-                      "type": [
-                        "string",
-                        "number",
-                        "boolean"
-                      ]
+                      "type": ["string", "number", "boolean"]
                     }
                   }
                 },
-                "required": [
-                  "text",
-                  "link"
-                ],
+                "required": ["text", "link"],
                 "additionalProperties": false
               },
               "default": []
@@ -561,14 +529,7 @@
                   "properties": {
                     "variant": {
                       "type": "string",
-                      "enum": [
-                        "note",
-                        "danger",
-                        "success",
-                        "caution",
-                        "tip",
-                        "default"
-                      ],
+                      "enum": ["note", "danger", "success", "caution", "tip", "default"],
                       "default": "default"
                     },
                     "class": {
@@ -578,9 +539,7 @@
                       "type": "string"
                     }
                   },
-                  "required": [
-                    "text"
-                  ],
+                  "required": ["text"],
                   "additionalProperties": false
                 }
               ]
@@ -619,9 +578,7 @@
               "type": "string"
             }
           },
-          "required": [
-            "content"
-          ],
+          "required": ["content"],
           "additionalProperties": false
         },
         "pagefind": {
@@ -636,9 +593,7 @@
           "type": "string"
         }
       },
-      "required": [
-        "title"
-      ],
+      "required": ["title"],
       "additionalProperties": false
     }
   },
