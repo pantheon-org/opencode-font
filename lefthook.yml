@@ -1,0 +1,14 @@
+pre-commit:
+  parallel: true
+  commands:
+    prettier:
+      run: "npx prettier --write '**/*.{ts,tsx,js,jsx,json,md,css,scss,html}'"
+      include: "**/*.{ts,tsx,js,jsx,json,md,css,scss,html}"
+    eslint:
+      run: "npx eslint 'src/**/*.{ts,tsx,js,jsx}' --fix"
+      include: "src/**/*.{ts,tsx,js,jsx}"
+    typecheck:
+      run: "npm run typecheck"
+    test:
+      run: "bun test"
+
