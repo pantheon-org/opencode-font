@@ -17,6 +17,10 @@ pages/.astro/
 pages/dist/
 pages/src/content/docs/
 
+# Generated documentation artifacts (deployed to docs branch)
+dist/
+.astro/
+
 # OpenCode context (project-specific, not for repo)
 .context/
 
@@ -34,6 +38,3 @@ fonts/*.otf
 !fonts/.gitkeep
 !fonts/test.html
 
-# Allow GitHub workflows and scripts
-!.github/
-!.github/**
