@@ -195,3 +195,4 @@ When making changes to the documentation:
 ## License
 
 MIT - See the root LICENSE file for details.
+# Documentation site configuration
