@@ -94,7 +94,7 @@ const description = 'All available glyphs rendered as SVG in both light and dark
 
   .glyph-card {
     background: var(--color-background-weak);
-    border: 1px solid var(--color-border-weak);
+    border: 1px solid var(--color-border);
     border-radius: 8px;
     padding: 1rem;
     display: flex;
@@ -102,6 +102,7 @@ const description = 'All available glyphs rendered as SVG in both light and dark
     align-items: center;
     gap: 0.75rem;
     transition: transform 0.2s, border-color 0.2s;
+    min-width: 0; /* Prevent grid blowout */
   }
 
   .glyph-card:hover {
@@ -114,6 +115,8 @@ const description = 'All available glyphs rendered as SVG in both light and dark
     font-weight: 600;
     color: var(--color-text-strong);
     font-family: var(--__sl-font);
+    width: 100%;
+    text-align: center;
   }
 
   .glyph-preview {
@@ -122,6 +125,7 @@ const description = 'All available glyphs rendered as SVG in both light and dark
     align-items: center;
     justify-content: center;
     width: 100%;
+    flex: 1; /* Allow preview to take available space */
   }
 
   .glyph-preview svg {
@@ -131,20 +135,42 @@ const description = 'All available glyphs rendered as SVG in both light and dark
 
   .symbol-list {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 1.5rem;
     margin: 2rem 0;
   }
 
   .symbol-card {
     background: var(--color-background-weak);
-    border: 1px solid var(--color-border-weak);
+    border: 1px solid var(--color-border);
     border-radius: 8px;
-    padding: 1.5rem;
+    padding: 1rem;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1rem;
+    gap: 0.75rem;
+    transition: transform 0.2s, border-color 0.2s;
+    min-width: 0; /* Prevent grid blowout */
+  }
+
+  .symbol-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--color-border);
+  }
+
+  /* Ensure SVGs don't create visual border effect from whitespace */
+  .symbol-preview svg,
+  .glyph-preview svg {
+    display: block;
+    margin: 0 auto;
+  }
+
+  /* Ensure both preview containers have identical styling */
+  .glyph-preview,
+  .symbol-preview {
+    background: transparent;
+    border: none;
+    padding: 0;
   }
 
   .symbol-name {
@@ -153,12 +179,16 @@ const description = 'All available glyphs rendered as SVG in both light and dark
     text-transform: uppercase;
     color: var(--color-text-strong);
     letter-spacing: 0.5px;
+    width: 100%;
+    text-align: center;
   }
 
   .symbol-char {
     font-size: 2rem;
     font-family: var(--__sl-font);
     color: var(--color-text);
+    width: 100%;
+    text-align: center;
   }
 
   .symbol-preview {
@@ -167,6 +197,7 @@ const description = 'All available glyphs rendered as SVG in both light and dark
     align-items: center;
     justify-content: center;
     width: 100%;
+    flex: 1; /* Allow preview to take available space */
   }
 
   .symbol-preview svg {
@@ -257,7 +288,7 @@ const description = 'All available glyphs rendered as SVG in both light and dark
 
     letters.forEach(letter => {
       const card = document.createElement('div');
-      card.className = 'glyph-card';
+      card.className = 'glyph-card astro-wond2cyt';
 
       const letterDiv = document.createElement('div');
       letterDiv.className = 'glyph-letter';
