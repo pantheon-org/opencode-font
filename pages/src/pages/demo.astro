@@ -15,13 +15,11 @@ const description = 'Try out the OpenCode Font APIs with live code examples';
 <div class="demo-section">
   <div class="input-group">
     <label for="blocky-text">Text (A-Z and symbols)</label>
-    <input 
-      type="text" 
+    <textarea 
       id="blocky-text" 
-      value="OPENCODE" 
-      maxlength="20"
+      rows="3"
       placeholder="HELLO WORLD"
-    />
+    >OPENCODE</textarea>
   </div>
 
   <div class="controls">
@@ -64,51 +62,6 @@ const description = 'Try out the OpenCode Font APIs with live code examples';
   </div>
 </div>
 
-<hr />
-
-<h2>Simple Text Demo</h2>
-
-<p>Font-based SVG generation with custom styling.</p>
-
-<div class="demo-section">
-  <div class="input-group">
-    <label for="simple-text">Text (A-Z and symbols)</label>
-    <input 
-      type="text" 
-      id="simple-text" 
-      value="HELLO" 
-      maxlength="20"
-      placeholder="HELLO"
-    />
-  </div>
-
-  <div class="controls">
-    <div class="control-group">
-      <label for="fontSize">Font Size</label>
-      <input type="range" id="fontSize" min="24" max="96" value="48" />
-      <span id="fontSize-value">48</span>
-    </div>
-
-    <div class="control-group">
-      <label for="color">Color</label>
-      <input type="color" id="color" value="#00ff00" />
-      <span id="color-value">#00ff00</span>
-    </div>
-
-  </div>
-
-  <div class="preview" id="simple-preview">
-  </div>
-
-  <div class="code-output">
-    <div class="code-header">
-      <span>Generated SVG</span>
-      <button id="copy-simple" class="copy-btn">Copy</button>
-    </div>
-    <pre><code id="simple-code"></code></pre>
-  </div>
-</div>
-
 </div>
 
 <style>
@@ -136,7 +89,8 @@ const description = 'Try out the OpenCode Font APIs with live code examples';
     color: var(--color-text-strong);
   }
 
-  .input-group input[type="text"] {
+  .input-group input[type="text"],
+  .input-group textarea {
     width: 100%;
     padding: 0.75rem;
     font-size: 1rem;
@@ -146,6 +100,7 @@ const description = 'Try out the OpenCode Font APIs with live code examples';
     border-radius: 4px;
     color: var(--color-text);
     text-transform: uppercase;
+    resize: vertical;
   }
 
   .controls {
@@ -194,6 +149,7 @@ const description = 'Try out the OpenCode Font APIs with live code examples';
 
   .preview {
     min-height: 120px;
+    max-height: 400px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -202,6 +158,7 @@ const description = 'Try out the OpenCode Font APIs with live code examples';
     border-radius: 4px;
     padding: 2rem;
     margin-bottom: 1.5rem;
+    overflow: auto;
   }
 
   .code-output {
@@ -260,10 +217,10 @@ const description = 'Try out the OpenCode Font APIs with live code examples';
 
 <script>
   // Import the library functions
-  import { blockyTextToSVG, convertTextToSVG } from '../utils/alphabet';
+  import { blockyTextToSVG } from '../utils/alphabet';
 
   // Blocky Text Demo
-  const blockyText = document.getElementById('blocky-text') as HTMLInputElement;
+  const blockyText = document.getElementById('blocky-text') as HTMLTextAreaElement;
   const theme = document.getElementById('theme') as HTMLSelectElement;
   const blockSize = document.getElementById('blockSize') as HTMLInputElement;
   const charSpacing = document.getElementById('charSpacing') as HTMLInputElement;
@@ -301,42 +258,8 @@ const description = 'Try out the OpenCode Font APIs with live code examples';
     setTimeout(() => copyBlocky.textContent = 'Copy', 2000);
   });
 
-  // Simple Text Demo
-  const simpleText = document.getElementById('simple-text') as HTMLInputElement;
-  const fontSize = document.getElementById('fontSize') as HTMLInputElement;
-  const color = document.getElementById('color') as HTMLInputElement;
-  const simplePreview = document.getElementById('simple-preview') as HTMLElement;
-  const simpleCode = document.getElementById('simple-code') as HTMLElement;
-  const copySimple = document.getElementById('copy-simple') as HTMLButtonElement;
-
-  function updateSimpleDemo() {
-    const text = simpleText.value.toUpperCase() || 'HELLO';
-    const svg = convertTextToSVG(text, {
-      fontSize: parseInt(fontSize.value),
-      color: color.value,
-    });
-
-    simplePreview.innerHTML = svg;
-    simpleCode.textContent = svg;
-
-    // Update value displays
-    document.getElementById('fontSize-value')!.textContent = fontSize.value;
-    document.getElementById('color-value')!.textContent = color.value;
-  }
-
-  simpleText.addEventListener('input', updateSimpleDemo);
-  fontSize.addEventListener('input', updateSimpleDemo);
-  color.addEventListener('input', updateSimpleDemo);
-
-  copySimple.addEventListener('click', () => {
-    navigator.clipboard.writeText(simpleCode.textContent || '');
-    copySimple.textContent = 'Copied!';
-    setTimeout(() => copySimple.textContent = 'Copy', 2000);
-  });
-
-  // Initialize demos
+  // Initialize demo
   updateBlockyDemo();
-  updateSimpleDemo();
 </script>
 
 </StarlightPage>
