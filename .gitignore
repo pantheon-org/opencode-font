@@ -40,3 +40,9 @@ fonts/*.otf
 !fonts/.gitkeep
 !fonts/test.html
 
+# Playwright test artifacts
+test-results/
+playwright-report/
+playwright/.cache/
+.playwright/
+

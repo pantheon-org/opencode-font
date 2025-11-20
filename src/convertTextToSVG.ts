@@ -30,7 +30,43 @@
  * ```
  */
 
-export function convertTextToSVG(
+/**
+ * Build SVG attributes from options
+ */
+const buildSVGAttributes = (options: {
+  width?: number;
+  height?: number;
+  includeNamespace?: boolean;
+  role?: string;
+  ariaLabel?: string;
+}): string => {
+  const { width, height, includeNamespace = true, role, ariaLabel } = options;
+
+  const ns = includeNamespace ? 'xmlns="http://www.w3.org/2000/svg"' : '';
+  const wAttr = width ? ` width="${width}"` : '';
+  const hAttr = height ? ` height="${height}"` : '';
+  const roleAttr = role ? ` role="${role}"` : '';
+  const ariaAttr = ariaLabel ? ` aria-label="${ariaLabel}"` : '';
+
+  return `${ns}${wAttr}${hAttr} viewBox="0 0 100 20"${roleAttr}${ariaAttr}`;
+};
+
+/**
+ * Build text element with font styling
+ */
+const buildTextElement = (
+  text: string,
+  fontSize: number,
+  fontFamily: string,
+  color: string,
+): string => {
+  return `<text x="0" y="14" font-family="${fontFamily}" font-size="${fontSize}" fill="${color}">${escapeXml(text)}</text>`;
+};
+
+/**
+ * Convert text to an SVG string
+ */
+export const convertTextToSVG = (
   text: string | null | undefined,
   options: {
     fontSize?: number;
@@ -42,35 +78,25 @@ export function convertTextToSVG(
     role?: string;
     ariaLabel?: string;
   } = {},
-): string {
-  const {
-    fontSize = 48,
-    color = '#000',
-    fontFamily = 'OpenCodeLogo',
-    width,
-    height,
-    includeNamespace = true,
-    role,
-    ariaLabel,
-  } = options;
+): string => {
+  const { fontSize = 48, color = '#000', fontFamily = 'OpenCodeLogo' } = options;
 
   const safeText = text == null ? '' : String(text);
-  const ns = includeNamespace ? 'xmlns="http://www.w3.org/2000/svg"' : '';
-  const wAttr = width ? ` width="${width}"` : '';
-  const hAttr = height ? ` height="${height}"` : '';
-  const roleAttr = role ? ` role="${role}"` : '';
-  const ariaAttr = ariaLabel ? ` aria-label="${ariaLabel}"` : '';
+  const svgAttrs = buildSVGAttributes(options);
+  const textElement = buildTextElement(safeText, fontSize, fontFamily, color);
 
-  const svg = `<svg ${ns}${wAttr}${hAttr} viewBox="0 0 100 20"${roleAttr}${ariaAttr}>
-  <text x="0" y="14" font-family="${fontFamily}" font-size="${fontSize}" fill="${color}">${escapeXml(safeText)}</text>
+  return `<svg ${svgAttrs}>
+  ${textElement}
 </svg>`;
-  return svg;
-}
+};
 
-export function escapeXml(unsafe: string | null | undefined): string {
+/**
+ * Escape XML special characters
+ */
+export const escapeXml = (unsafe: string | null | undefined): string => {
   return unsafe == null
     ? ''
-    : String(unsafe).replace(/[&<>\"']/g, function (c) {
+    : String(unsafe).replace(/[&<>\"']/g, (c) => {
         switch (c) {
           case '&':
             return '&amp;';
@@ -86,6 +112,6 @@ export function escapeXml(unsafe: string | null | undefined): string {
             return c;
         }
       });
-}
+};
 
 // lefthook test

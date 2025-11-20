@@ -19,14 +19,76 @@ module.exports = [
     },
     plugins: {
       '@typescript-eslint': require('@typescript-eslint/eslint-plugin'),
+      'prefer-arrow': require('eslint-plugin-prefer-arrow'),
+      sonarjs: require('eslint-plugin-sonarjs'),
+      import: require('eslint-plugin-import'),
+      tsdoc: require('eslint-plugin-tsdoc'),
+      jsdoc: require('eslint-plugin-jsdoc'),
       prettier: require('eslint-plugin-prettier'),
     },
+    settings: {
+      'import/resolver': {
+        typescript: {},
+      },
+      jsdoc: {
+        mode: 'typescript',
+      },
+    },
     rules: {
-      'prettier/prettier': 'error',
-      '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+      'prettier/prettier': [
+        'error',
+        {
+          singleQuote: true,
+          tabWidth: 2,
+          semi: true,
+          trailingComma: 'all',
+        },
+      ],
+
+      'max-lines': ['warn', { max: 200, skipBlankLines: true, skipComments: true }],
+      'max-statements': ['error', 30],
+      'prefer-arrow/prefer-arrow-functions': [
+        'warn', // Downgrade to warning - exported functions are legitimate
+        {
+          disallowPrototype: true,
+          singleReturnOnly: false,
+          classPropertiesAllowed: false,
+        },
+      ],
       '@typescript-eslint/explicit-module-boundary-types': 'off',
+      '@typescript-eslint/no-explicit-any': 'warn',
       'no-var': 'error',
       'prefer-const': 'error',
+
+      complexity: ['warn', 10],
+      'import/max-dependencies': ['warn', { max: 10 }],
+      'import/no-cycle': 'error',
+
+      // Disable tsdoc/syntax as it's too strict for JSDoc-style comments
+      'tsdoc/syntax': 'off',
+
+      // JSDoc rules (TypeScript-friendly)
+      'jsdoc/require-jsdoc': 'warn', // Downgrade to warning instead of error
+      'jsdoc/require-param': 'off',
+      'jsdoc/check-tag-names': 'off', // Allow non-standard JSDoc tags like @type
+      'jsdoc/no-undefined-types': 'off',
+      'jsdoc/require-param-type': 'off',
+      'jsdoc/require-returns-type': 'off',
+    },
+  },
+  {
+    files: ['**/*.test.ts'],
+    rules: {
+      'tsdoc/syntax': 'off',
+      'prettier/prettier': 'off',
+      'max-lines': 'off',
+    },
+  },
+  {
+    // Barrel/index files that re-export multiple modules
+    files: ['**/index.ts', '**/glyphs/index.ts'],
+    rules: {
+      'import/max-dependencies': 'off', // Index files naturally have many exports
     },
   },
 ];
