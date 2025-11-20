@@ -28,6 +28,7 @@
     "test:e2e:coverage": "playwright test coverage-example.spec.ts",
     "test:e2e:coverage:report": "echo 'Coverage reports saved to coverage/e2e/' && ls -lh coverage/e2e/",
     "playwright:install": "playwright install --with-deps",
+    "check:docs": "bun run scripts/check-docs.ts",
     "typecheck": "tsc --noEmit",
     "lint": "eslint 'src/**/*.{ts,tsx,js,jsx}'",
     "lint:fix": "eslint 'src/**/*.{ts,tsx,js,jsx}' --fix",
@@ -35,8 +36,18 @@
     "format:check": "prettier --check '**/*.{ts,tsx,js,jsx,json,md,css,scss,html}'",
     "clean": "rm -rf dist/ .bun-cache/ coverage/",
     "pack": "npm pack",
+    "check:repo-config": "node .github/scripts/check-repo-config.cjs",
     "generate:fonts": "bun run scripts/generate-fonts.ts",
-    "validate:fonts": "bash scripts/validate-fonts.sh"
+    "validate:fonts": "bun run scripts/validate-fonts.ts",
+    "validate:docs-links": "bun run scripts/validate-docs-links.ts",
+    "fix:docs-links": "bun run scripts/fix-doc-links.ts",
+    "fix:docs-links:dry-run": "bun run scripts/fix-doc-links.ts --dry-run",
+    "pages:transform": "cd pages && node transform-docs.js",
+    "pages:dev": "cd pages && bun run dev",
+    "pages:build": "cd pages && bun run build",
+    "pages:preview": "cd pages && bun run preview",
+    "verify:package": "npm pack --dry-run",
+    "prepublishOnly": "bun run build && bun test && bun run verify:package"
   },
   "keywords": [
     "font",
