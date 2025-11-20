@@ -1,4 +1,4 @@
-import { cellType } from './types';
+import { cellType, type CellType } from './types';
 import { getColorFromLetter, themeType, type ThemeType } from './theme';
 import { ALPHABET, SYMBOLS } from './types';
 import { optimizeBlocksToSVGPaths } from './svg-optimizer';
@@ -26,68 +26,91 @@ const DEFAULT_BLOCKY_TEXT_OPTIONS: Required<BlockyTextOptions> = {
   optimize: true, // Enable optimization by default for smaller file sizes
 };
 
+/**
+ * Get character data from ALPHABET or SYMBOLS
+ */
+const getCharData = (char: string) => {
+  return ALPHABET[char as keyof typeof ALPHABET] || SYMBOLS[char as keyof typeof SYMBOLS];
+};
+
+/**
+ * Calculate the number of columns for a character
+ */
+const getCharColumns = (rowsObj: Record<number, number[]>): number => {
+  return Math.max(...Object.values(rowsObj).map((r) => (Array.isArray(r) ? r.length : 0)));
+};
+
+/**
+ * Convert raw cell value to cellType
+ */
+const normalizeCellValue = (raw: number | CellType | undefined, row: number): CellType => {
+  if (typeof raw !== 'number') {
+    return raw || cellType.BLANK;
+  }
+
+  if (raw === 1) {
+    // Auto-assign based on row: rows 3-5 use SECONDARY, others use PRIMARY
+    return row >= 3 && row <= 5 ? cellType.SECONDARY : cellType.PRIMARY;
+  } else if (raw === 2) {
+    return cellType.SECONDARY;
+  } else if (raw === 3) {
+    return cellType.TERTIARY;
+  }
+
+  return cellType.BLANK;
+};
+
+/**
+ * Process a single character and add its blocks
+ */
+const processCharacter = (
+  char: string,
+  xOffset: number,
+  blocks: Block[],
+  options: { theme: ThemeType; blockSize: number; charSpacing: number },
+): number => {
+  const { theme, blockSize, charSpacing } = options;
+  const charData = getCharData(char);
+
+  if (!charData) {
+    console.warn(`Character "${char}" not found in alphabet data. Skipping.`);
+    return xOffset + blockSize + charSpacing;
+  }
+
+  const rowsObj = charData.rows as Record<number, number[]>;
+  const cols = getCharColumns(rowsObj);
+
+  for (let row = 0; row < 7; row++) {
+    const rowArr = rowsObj[row] || [];
+    for (let col = 0; col < cols; col++) {
+      const raw = rowArr[col];
+      const cellValue = normalizeCellValue(raw, row);
+
+      // Skip undefined or blank cells
+      if (!cellValue || cellValue === cellType.BLANK) continue;
+
+      const color = getColorFromLetter(charData, theme, cellValue);
+      blocks.push({
+        x: xOffset + col * blockSize,
+        y: row * blockSize,
+        color,
+      });
+    }
+  }
+
+  return xOffset + cols * blockSize + charSpacing * blockSize;
+};
+
 export const textToBlocks = (
   text: string,
   options: Required<BlockyTextOptions> = DEFAULT_BLOCKY_TEXT_OPTIONS,
 ): Block[] => {
   const { theme = themeType.LIGHT, blockSize = 20, charSpacing = 5 } = options;
-
   const blocks: Block[] = [];
   let xOffset = 0;
 
   for (const char of text.toUpperCase()) {
-    // Check both ALPHABET and SYMBOLS
-    const charData =
-      ALPHABET[char as keyof typeof ALPHABET] || SYMBOLS[char as keyof typeof SYMBOLS];
-    if (!charData) {
-      // Skip characters that are not in the alphabet or symbols
-      console.warn(`Character "${char}" not found in alphabet data. Skipping.`);
-      xOffset += blockSize + charSpacing;
-      continue;
-    }
-
-    // Determine the number of columns for this character by scanning its rows
-    const rowsObj = charData.rows as Record<number, any[]>;
-
-    // Support two row formats:
-    // - Record<number, Array<CellType>> (legacy)
-    // - Record<number, Array<number>> where numbers are 0/1 (new)
-    const cols = Math.max(...Object.values(rowsObj).map((r) => (Array.isArray(r) ? r.length : 0)));
-
-    for (let row = 0; row < 7; row++) {
-      const rowArr = rowsObj[row] || [];
-      for (let col = 0; col < cols; col++) {
-        const raw = rowArr[col];
-        let cellValue: any = raw;
-
-        // If numeric rows (0/1/2/3), convert to cellType
-        if (typeof raw === 'number') {
-          if (raw === 1) {
-            // Auto-assign based on row: rows 3-5 use SECONDARY, others use PRIMARY
-            cellValue = row >= 3 && row <= 5 ? cellType.SECONDARY : cellType.PRIMARY;
-          } else if (raw === 2) {
-            cellValue = cellType.SECONDARY;
-          } else if (raw === 3) {
-            cellValue = cellType.TERTIARY;
-          } else {
-            cellValue = cellType.BLANK;
-          }
-        }
-
-        // Skip undefined or blank cells
-        if (!cellValue || cellValue === cellType.BLANK) continue;
-
-        const color = getColorFromLetter(charData, theme, cellValue as any);
-        blocks.push({
-          x: xOffset + col * blockSize,
-          y: row * blockSize,
-          color,
-        });
-      }
-    }
-
-    // charSpacing represents number of blank block columns between characters
-    xOffset += cols * blockSize + charSpacing * blockSize;
+    xOffset = processCharacter(char, xOffset, blocks, { theme, blockSize, charSpacing });
   }
 
   return blocks;
@@ -110,7 +133,7 @@ export const calculateWidth = (text: string, options: Required<BlockyTextOptions
     }
 
     // Calculate actual column width for this character
-    const rowsObj = charData.rows as Record<number, any[]>;
+    const rowsObj = charData.rows as Record<number, number[]>;
     const cols = Math.max(...Object.values(rowsObj).map((r) => (Array.isArray(r) ? r.length : 0)));
 
     totalWidth += cols * blockSize + charSpacing * blockSize;

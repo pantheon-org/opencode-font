@@ -1,4 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import type { Theme, ThemeType } from './theme';
 import {
   letterA,

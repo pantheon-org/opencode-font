@@ -24,37 +24,31 @@ const description = 'All available glyphs rendered as SVG in both light and dark
 <div class="symbol-list">
   <div class="symbol-card">
     <div class="symbol-name">Hyphen</div>
-    <div class="symbol-char">-</div>
     <div class="symbol-preview" id="symbol-hyphen"></div>
   </div>
 
 <div class="symbol-card">
   <div class="symbol-name">Pipe</div>
-  <div class="symbol-char">|</div>
   <div class="symbol-preview" id="symbol-pipe"></div>
 </div>
 
 <div class="symbol-card">
   <div class="symbol-name">Apostrophe</div>
-  <div class="symbol-char">'</div>
   <div class="symbol-preview" id="symbol-apostrophe"></div>
 </div>
 
 <div class="symbol-card">
   <div class="symbol-name">Quote</div>
-  <div class="symbol-char">"</div>
   <div class="symbol-preview" id="symbol-quote"></div>
 </div>
 
 <div class="symbol-card">
   <div class="symbol-name">Question</div>
-  <div class="symbol-char">?</div>
   <div class="symbol-preview" id="symbol-question"></div>
 </div>
 
   <div class="symbol-card">
     <div class="symbol-name">Exclamation</div>
-    <div class="symbol-char">!</div>
     <div class="symbol-preview" id="symbol-exclamation"></div>
   </div>
 </div>
@@ -88,6 +82,7 @@ const description = 'All available glyphs rendered as SVG in both light and dark
   .glyph-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    grid-auto-rows: minmax(120px, auto); /* Set explicit row height */
     gap: 1.5rem;
     margin: 2rem 0;
   }
@@ -100,9 +95,10 @@ const description = 'All available glyphs rendered as SVG in both light and dark
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: flex-start;
     gap: 0.75rem;
     transition: transform 0.2s, border-color 0.2s;
-    min-width: 0; /* Prevent grid blowout */
+    height: 100%; /* Fill grid cell height */
   }
 
   .glyph-card:hover {
@@ -135,7 +131,8 @@ const description = 'All available glyphs rendered as SVG in both light and dark
 
   .symbol-list {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    grid-auto-rows: minmax(120px, auto); /* Set explicit row height */
     gap: 1.5rem;
     margin: 2rem 0;
   }
@@ -148,9 +145,10 @@ const description = 'All available glyphs rendered as SVG in both light and dark
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: flex-start;
     gap: 0.75rem;
     transition: transform 0.2s, border-color 0.2s;
-    min-width: 0; /* Prevent grid blowout */
+    height: 100%; /* Fill grid cell height */
   }
 
   .symbol-card:hover {
@@ -179,14 +177,6 @@ const description = 'All available glyphs rendered as SVG in both light and dark
     text-transform: uppercase;
     color: var(--color-text-strong);
     letter-spacing: 0.5px;
-    width: 100%;
-    text-align: center;
-  }
-
-  .symbol-char {
-    font-size: 2rem;
-    font-family: var(--__sl-font);
-    color: var(--color-text);
     width: 100%;
     text-align: center;
   }
