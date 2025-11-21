@@ -46,3 +46,8 @@ playwright-report/
 playwright/.cache/
 .playwright/
 
+# Visual regression test screenshots (exclude all except baseline)
+tests/screenshots/**/*.png
+!tests/screenshots/baseline/
+!tests/screenshots/baseline/**/*.png
+
