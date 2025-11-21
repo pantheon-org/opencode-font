@@ -87,10 +87,49 @@ jobs:
           path: playwright-report/
           retention-days: 30
 
+  visual-regression:
+    name: Visual Regression Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Run visual regression tests
+        run: bun run test:e2e:visual --project=chromium
+
+      - name: Upload visual regression results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-regression-report
+          path: playwright-report/
+          retention-days: 30
+
+      - name: Upload visual diffs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-diffs
+          path: test-results/
+          retention-days: 7
+
   report:
     name: Generate Test Report
     runs-on: ubuntu-latest
-    needs: [test, mobile-test]
+    needs: [test, mobile-test, visual-regression]
     if: always()
 
     steps:
@@ -109,7 +148,8 @@ jobs:
           echo "Test artifacts have been uploaded for review." >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### Browsers Tested" >> $GITHUB_STEP_SUMMARY
-          echo "- Chromium" >> $GITHUB_STEP_SUMMARY
-          echo "- Firefox" >> $GITHUB_STEP_SUMMARY
-          echo "- WebKit" >> $GITHUB_STEP_SUMMARY
-          echo "- Mobile (Chrome & Safari)" >> $GITHUB_STEP_SUMMARY
+           echo "- Chromium" >> $GITHUB_STEP_SUMMARY
+           echo "- Firefox" >> $GITHUB_STEP_SUMMARY
+           echo "- WebKit" >> $GITHUB_STEP_SUMMARY
+           echo "- Mobile (Chrome & Safari)" >> $GITHUB_STEP_SUMMARY
+           echo "- Visual Regression (Chromium)" >> $GITHUB_STEP_SUMMARY
